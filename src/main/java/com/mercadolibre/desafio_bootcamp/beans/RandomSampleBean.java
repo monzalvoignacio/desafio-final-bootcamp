@@ -1,6 +1,6 @@
 package com.mercadolibre.desafio_bootcamp.beans;
 
-import com.mercadolibre.desafio_bootcamp.dtos.SampleDTO;
+import com.mercadolibre.desafio_bootcamp.dto.SampleDTO;
 import java.util.Random;
 import org.springframework.stereotype.Component;
 
