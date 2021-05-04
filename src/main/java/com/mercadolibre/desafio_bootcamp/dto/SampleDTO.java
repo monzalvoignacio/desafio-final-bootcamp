@@ -1,4 +1,4 @@
-package com.mercadolibre.desafio_bootcamp.dtos;
+package com.mercadolibre.desafio_bootcamp.dto;
 
 import java.io.Serializable;
 
