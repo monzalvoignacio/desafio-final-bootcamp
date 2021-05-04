@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PartsController {
     @GetMapping("/api/v1/parts")
-    public ResponseEntity getParts(@RequestParam(name = "queryType", defaultValue = "C") char queryType, @RequestParam(name = "date", defaultValue = "") String date, @RequestParam(name = "order") String order) {
+    public ResponseEntity getParts(@RequestParam(name = "queryType", defaultValue = "C") char queryType, @RequestParam(name = "date", defaultValue = "") String date, @RequestParam(name = "order", defaultValue = "0") String order) {
         return null;
     }
 }
