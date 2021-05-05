@@ -15,7 +15,7 @@ public class DeliveryStatus {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @NotNull
     private Long id;
-    private char code;
+    private String code;
     private String description;
     @OneToMany(mappedBy = "deliveryStatus")
     private List<Order> orders;

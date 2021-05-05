@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
-    List<Order> findOrderByConcessionarieAndDeliveryStatusEquals(Long concessionary_id, char status);
-    List<Order> findOrderByConcessionarieEquals(Long dealerNumber);
+    List<Order> findOrderByConcessionarieIdEqualsAndDeliveryStatusIdEquals(Long concessionary_id, Long delivery_id);
+    List<Order> findOrderByConcessionarieIdEquals(Long concessionarie_id);
 }

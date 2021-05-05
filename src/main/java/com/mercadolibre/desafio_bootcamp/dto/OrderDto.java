@@ -15,7 +15,7 @@ public class OrderDto {
     private String orderDate;
     private String deliveryDate;
     private Integer daysDelayed;
-    private char deliveryStatus;
+    private String deliveryStatus;
     private List<OrderDetailDto> orderDetails;
     
 }

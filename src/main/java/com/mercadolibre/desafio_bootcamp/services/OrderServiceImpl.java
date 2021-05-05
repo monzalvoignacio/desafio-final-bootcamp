@@ -11,12 +11,14 @@ import com.mercadolibre.desafio_bootcamp.util.DateMapper;
 import com.mercadolibre.desafio_bootcamp.util.OrderMapper;
 import com.mercadolibre.desafio_bootcamp.util.PartMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+@Service
 public class OrderServiceImpl implements OrdersService{
 
     private OrderRepository repoOrders;
@@ -35,9 +37,9 @@ public class OrderServiceImpl implements OrdersService{
 
 
     @Override
-    public OrderResponseDto getOrders(Long dealerNumber, char deliveryStatusCode, String order) throws Exception {
+    public OrderResponseDto getOrders(Long dealerNumber, String deliveryStatusCode, String order) throws Exception {
         List<Order> orders = null;
-        boolean filterStatusCode = !String.valueOf(deliveryStatusCode).isEmpty();
+        boolean filterStatusCode = !deliveryStatusCode.isEmpty();
 
         Concessionarie consessionary = repoConcessionary.findById(dealerNumber).orElse(null);
         if(consessionary == null){
@@ -55,10 +57,10 @@ public class OrderServiceImpl implements OrdersService{
             }
 
             orders = repoOrders.
-                    findOrderByConcessionarieAndDeliveryStatusEquals(dealerNumber,deliveryStatusCode);
+                    findOrderByConcessionarieIdEqualsAndDeliveryStatusIdEquals(dealerNumber,deliveryStatus.getId());
         }
         else{
-            orders = repoOrders.findOrderByConcessionarieEquals(dealerNumber);
+            orders = repoOrders.findOrderByConcessionarieIdEquals(dealerNumber);
         }
 
 

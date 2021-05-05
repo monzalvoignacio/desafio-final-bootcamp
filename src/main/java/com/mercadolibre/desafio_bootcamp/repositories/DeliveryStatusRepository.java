@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface DeliveryStatusRepository extends JpaRepository<DeliveryStatus, Long> {
 
-    List<DeliveryStatus> findByCodeEquals(char code);
+    List<DeliveryStatus> findByCodeEquals(String code);
 }
