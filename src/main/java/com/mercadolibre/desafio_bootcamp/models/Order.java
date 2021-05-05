@@ -37,8 +37,5 @@ public class Order {
     private CentralHouse centralHouse;
     @OneToMany(mappedBy = "order")
     private List<OrderDetail> orderDetails;
-    @ManyToOne
-    @JoinColumn(name = "order_status_id", nullable = false)
-    private OrderStatus orderStatus;
 
 }

@@ -36,8 +36,28 @@ public class OrderServiceImpl implements OrdersService{
     }
 
 
+    public Integer validateOrder(Integer order){
+        if (order < 1 || order > 2){
+            throw new ApiException(HttpStatus.BAD_REQUEST.name(), "order must be between 1 or 2", HttpStatus.BAD_REQUEST.value());
+        }
+        return order;
+    }
+
+    private void orderOrders(Integer order, List<Order> orders) throws Exception {
+        switch (order){
+            case 1:
+                orders.sort(Comparator.comparing(Order::getOrderNumberCM));
+                break;
+
+            case 2:
+                orders.sort(Comparator.comparing(Order::getOrderNumberCM).reversed());
+                break;
+        }
+    }
+
+
     @Override
-    public OrderResponseDto getOrders(Long dealerNumber, String deliveryStatusCode, String order) throws Exception {
+    public OrderResponseDto getOrders(Long dealerNumber, String deliveryStatusCode, Integer order) throws Exception {
         List<Order> orders = null;
         boolean filterStatusCode = !deliveryStatusCode.isEmpty();
 
@@ -62,15 +82,16 @@ public class OrderServiceImpl implements OrdersService{
         else{
             orders = repoOrders.findOrderByConcessionarieIdEquals(dealerNumber);
         }
-
-
         if (orders.size() == 0){
             throw new ApiException
                     (HttpStatus.BAD_REQUEST.name(), "No orders found for this concessionaire", HttpStatus.BAD_REQUEST.value());
+        }
+        if(order > 0){
+            validateOrder(order);
+            orderOrders(order, orders);
         }
         List<OrderDto> orderDtos = orderMapper.mapList(orders);
         OrderResponseDto orderResponseDto = new OrderResponseDto(dealerNumber, orderDtos);
         return orderResponseDto;
     }
-
 }

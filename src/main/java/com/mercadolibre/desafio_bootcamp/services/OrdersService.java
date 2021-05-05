@@ -4,5 +4,5 @@ import com.mercadolibre.desafio_bootcamp.dto.responses.OrderResponseDto;
 
 public interface OrdersService {
 
-    OrderResponseDto getOrders(Long dealerNumber, String deliveryStatusCode, String order) throws Exception;
+    OrderResponseDto getOrders(Long dealerNumber, String deliveryStatusCode, Integer order) throws Exception;
 }

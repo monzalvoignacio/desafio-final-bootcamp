@@ -23,7 +23,7 @@ public class OrdersController {
     @GetMapping("/list")
     public ResponseEntity<OrderResponseDto> getOrders(@RequestParam(name = "dealerNumber",required = true) Long dealerNumber,
                                                      @RequestParam(name = "deliveryStatus", defaultValue = "",required = false) String deliveryStatus,
-                                                     @RequestParam(name = "order", defaultValue = "" ,required = false) String order) throws Exception {
+                                                     @RequestParam(name = "order", defaultValue = "0" ,required = false) Integer order) throws Exception {
         return new ResponseEntity<>(service.getOrders(dealerNumber,deliveryStatus,order), HttpStatus.OK);
     }
 }
