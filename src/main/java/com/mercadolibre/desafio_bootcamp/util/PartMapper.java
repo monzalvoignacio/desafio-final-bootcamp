@@ -4,11 +4,21 @@ import com.mercadolibre.desafio_bootcamp.dto.PartDto;
 import com.mercadolibre.desafio_bootcamp.models.Part;
 import com.mercadolibre.desafio_bootcamp.models.PartRecord;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 public class PartMapper {
-    public static PartDto map(Part part, Boolean isPrice){
+
+    public List<PartDto> mapList(List<Part> parts, Boolean isPrice) {
+        List<PartDto> list = new ArrayList<>();
+        for(Part p : parts) {
+            list.add(map(p, isPrice));
+        }
+        return list;
+    }
+
+    public PartDto map(Part part, Boolean isPrice){
         PartDto dto = new PartDto();
 
         dto.setDescription(part.getDescription());
