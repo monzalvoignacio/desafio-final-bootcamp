@@ -26,13 +26,13 @@ public class PartsServiceImpl implements PartsService{
 
     private PartRepository repoParts;
     private PartRecordRepository repoPartRecords;
+    private PartMapper mapper;
 
-    private ModelMapper mapper;
+    public PartsServiceImpl(PartRepository repoParts, PartRecordRepository repoPartRecords, PartMapper mapper){
+        this.repoParts = repoParts;
+        this.repoPartRecords = repoPartRecords;
+        this.mapper = mapper;
 
-    public PartsServiceImpl(PartRepository repo, PartRecordRepository repoRecords){
-        repoParts = repo;
-        repoPartRecords = repoRecords;
-        mapper = new ModelMapper();
     }
 
     @Override
@@ -73,7 +73,7 @@ public class PartsServiceImpl implements PartsService{
         return new PartResponseDto(listParts);
     }
 
-    private Integer validateOrder(String order){
+    public Integer validateOrder(String order){
         Integer orderInt = null;
         try {
             orderInt = Integer.parseInt(order);
@@ -89,18 +89,13 @@ public class PartsServiceImpl implements PartsService{
     }
 
 
-    private List<PartDto> getAllParts(){
+    public List<PartDto> getAllParts(){
         var result =  this.repoParts.findAll();
         ArrayList<PartDto> parts = new ArrayList<>();
-
-        for(Part p: result){
-            parts.add(PartMapper.map(p,false));
-        }
-
-        return parts;
+        return mapper.mapList(result, false);
     }
 
-    private List<PartDto> getAllPartsPriceMod(LocalDate date, Integer order) throws Exception {
+    public List<PartDto> getAllPartsPriceMod(LocalDate date, Integer order) throws Exception {
         List<PartRecord> result = this.repoPartRecords.findByLastModificationAfter(date);
         if (order > 0){
             orderPartsRecords(order, result);
@@ -111,12 +106,7 @@ public class PartsServiceImpl implements PartsService{
             parts.add(p.getPart());
         }
 
-        ArrayList<PartDto> partDtos = new ArrayList<>();
-        for (Part p: parts){
-            partDtos.add(PartMapper.map(p,true));
-        }
-
-        return partDtos;
+        return mapper.mapList(parts, true);
     }
 
     private List<PartDto> getAllPartsModify(LocalDate date, Integer order) throws Exception {
@@ -130,7 +120,7 @@ public class PartsServiceImpl implements PartsService{
 
         ArrayList<PartDto> parts = new ArrayList<>();
         for (Part p: result){
-            parts.add(PartMapper.map(p,false));
+            parts.add(mapper.map(p,false));
         }
 
 
