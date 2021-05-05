@@ -12,8 +12,9 @@ public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @NotNull
-    private Integer id;
+    private Long id;
     private String reason;
+    private String description;
     private Integer quantity;
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)

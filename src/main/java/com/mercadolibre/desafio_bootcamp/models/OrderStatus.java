@@ -13,7 +13,7 @@ public class OrderStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @NotNull
-    private Integer id;
+    private Long id;
     private String description;
     private String name;
     @OneToMany(mappedBy = "orderStatus")

@@ -13,7 +13,7 @@ public class Concessionarie {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @NotNull
-    private Integer id;
+    private Long id;
     private String address;
     private String name;
     private Integer phone;

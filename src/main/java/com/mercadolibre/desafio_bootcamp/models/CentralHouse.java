@@ -13,7 +13,7 @@ public class CentralHouse {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @NotNull
-    private Integer id;
+    private Long id;
     private String country;
     private Integer phone;
     private String name;
