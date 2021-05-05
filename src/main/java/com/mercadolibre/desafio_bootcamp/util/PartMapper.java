@@ -4,6 +4,9 @@ import com.mercadolibre.desafio_bootcamp.dto.PartDto;
 import com.mercadolibre.desafio_bootcamp.models.Part;
 import com.mercadolibre.desafio_bootcamp.models.PartRecord;
 import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
