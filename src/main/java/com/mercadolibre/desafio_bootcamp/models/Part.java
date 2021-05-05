@@ -27,4 +27,6 @@ public class Part {
     private LocalDate lastModification;
     @OneToMany(mappedBy = "part")
     private List<PartRecord> partRecords;
+    @OneToMany(mappedBy = "part")
+    private List<OrderDetail> orderDetails;
 }
