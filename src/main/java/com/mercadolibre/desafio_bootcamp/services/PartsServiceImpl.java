@@ -32,12 +32,10 @@ public class PartsServiceImpl implements PartsService{
         this.repoParts = repoParts;
         this.repoPartRecords = repoPartRecords;
         this.mapper = mapper;
-
     }
 
     @Override
     public PartResponseDto getParts(String queryType, String date, String order) throws Exception {
-
         // Se valida el queryType, en caso de ser C no debemos validar fechas ni nada por el estilo, solo arrojamos una excepción pq son filtros que no deben incluirse
         // Caso contrario se debe mappear la fecha, dónde se valida también que el formato sea correcto yyyy-MM-dd
         LocalDate fecha = null;
@@ -84,10 +82,8 @@ public class PartsServiceImpl implements PartsService{
         if (orderInt < 1 || orderInt > 3){
             throw new ApiException(HttpStatus.BAD_REQUEST.name(), "order must be between 1 or 3", HttpStatus.BAD_REQUEST.value());
         }
-
         return orderInt;
     }
-
 
     public List<PartDto> getAllParts(){
         var result =  this.repoParts.findAll();
@@ -100,66 +96,50 @@ public class PartsServiceImpl implements PartsService{
         if (order > 0){
             orderPartsRecords(order, result);
         }
-
-        List<Part> parts = new ArrayList<>();
-        for(PartRecord p: result){
-            parts.add(p.getPart());
-        }
-
+        List<Part> parts = getRelatedParts(result);
         return mapper.mapList(parts, true);
     }
 
-    private List<PartDto> getAllPartsModify(LocalDate date, Integer order) throws Exception {
-        List<Part> result = this.repoParts.findByLastModificationAfter(date);
-        //Una vez que obtenemos los datos, teniendo en cuenta si se recibe un orden procedemos a ordenar la lista dependiendo el tipo de orden indicado
-        if(order > 0){
-            orderParts(order, result);
+    public List<Part> getRelatedParts(List<PartRecord> records) {
+        List<Part> parts = new ArrayList<>();
+        for(PartRecord p: records){
+            parts.add(p.getPart());
         }
-
-        //Una vez ordenada la lista la mapeamos a los dtos para generar el response más adelante
-
-        ArrayList<PartDto> parts = new ArrayList<>();
-        for (Part p: result){
-            parts.add(mapper.map(p,false));
-        }
-
-
-
         return parts;
     }
 
-    private void orderParts(Integer order, List<Part> parts) throws Exception {
+    public List<PartDto> getAllPartsModify(LocalDate date, Integer order) throws Exception {
+        List<Part> result = this.repoParts.findByLastModificationAfter(date);
+        if(order > 0){
+            orderParts(order, result);
+        }
+        return mapper.mapList(result, false);
+    }
 
-        // ordenamos dependiendo el tipo de orden indicado, en caso de no coindir con los definidos arrojamos una excepción indicando el error
+    // order a list of Parts
+    public void orderParts(Integer order, List<Part> parts) throws Exception {
         switch (order){
             case 1:
                 parts.sort(Comparator.comparing(Part::getDescription));
                 break;
-
             case 2:
                 parts.sort(Comparator.comparing(Part::getDescription).reversed());
                 break;
-
             case 3:
                 parts.sort(Comparator.comparing(Part::getLastModification));
                 break;
         }
     }
 
-    private void orderPartsRecords(Integer order, List<PartRecord> parts) throws Exception {
-
-        // ordenamos dependiendo el tipo de orden indicado, en caso de no coindir con los definidos arrojamos una excepción indicando el error
-        //ToDo
-        // tener en cuenta de modificar el order 1 y 2 que esta por id y no por descripción
+    // order a list of PartsRecords
+    public void orderPartsRecords(Integer order, List<PartRecord> parts) throws Exception {
         switch (order){
             case 1:
-                parts.sort(Comparator.comparing(PartRecord::getId));
+                parts.sort((p1, p2) -> p1.getPart().getDescription().compareTo(p2.getPart().getDescription()));
                 break;
-
             case 2:
-                parts.sort(Comparator.comparing(PartRecord::getId).reversed());
+                parts.sort((p1, p2) -> p2.getPart().getDescription().compareTo(p1.getPart().getDescription()));
                 break;
-
             case 3:
                 parts.sort(Comparator.comparing(PartRecord::getLastModification));
         }

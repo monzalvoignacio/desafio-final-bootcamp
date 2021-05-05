@@ -3,24 +3,28 @@ package com.mercadolibre.desafio_bootcamp.unit.services;
 import com.mercadolibre.desafio_bootcamp.dto.PartDto;
 import com.mercadolibre.desafio_bootcamp.exceptions.ApiException;
 import com.mercadolibre.desafio_bootcamp.models.Part;
+import com.mercadolibre.desafio_bootcamp.models.PartRecord;
 import com.mercadolibre.desafio_bootcamp.repositories.PartRecordRepository;
 import com.mercadolibre.desafio_bootcamp.repositories.PartRepository;
 import com.mercadolibre.desafio_bootcamp.services.PartsServiceImpl;
 import com.mercadolibre.desafio_bootcamp.unit.fixtures.PartsFixture;
+import com.mercadolibre.desafio_bootcamp.util.MockitoExtension;
 import com.mercadolibre.desafio_bootcamp.util.PartMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-@ExtendWith(MockitoExtension.class)  // CHECKEAR SI NO DEBERIAMOS USAR LA CLASE CONFIGURADA DE MELI
+@ExtendWith(MockitoExtension.class)
 class PartsServiceImplTest {
+
+    // TODO first, refactor main method (split into separate validations)
+    // TODO after refacgoring, tests on main method
 
     private PartsServiceImpl service;
     private PartRepository partRepositoryMock;
@@ -73,29 +77,88 @@ class PartsServiceImplTest {
     }
 
     @Test
-    @DisplayName("Get parts filtered by modification date")
-    void getModifiedParts() throws Exception {
+    @DisplayName("Get modified price parts")
+    void getPriceModifiedParts() throws Exception {
         Mockito.when(partRecordRepositoryMock.findByLastModificationAfter(Mockito.any()))
                 .thenReturn(PartsFixture.defaultListPartRecord());
-        Mockito.when(mapperMock.mapList(Mockito.any(), Mockito.any()))
-                .thenReturn(PartsFixture.defaultFilteredListPartDto1());
-        List<PartDto> expected = PartsFixture.defaultFilteredListPartDto1();
-        assertEquals(4, partRecordRepositoryMock.findByLastModificationAfter(Mockito.any()).size());
+        Mockito.when(mapperMock.mapList(Mockito.any(), Mockito.any())).thenReturn(PartsFixture.defaultListPartDtoPriceModification());
+        List<PartDto> expected = PartsFixture.defaultListPartDtoPriceModification();
+        assertEquals(4, partRecordRepositoryMock.findByLastModificationAfter(LocalDate.of(2013, 04, 05)).size());
         assertEquals(expected, service.getAllPartsPriceMod(LocalDate.of(2014,01,10), 0));
     }
 
-
-    /*
-class HotelServiceImpleTest {
-
+    @Test
+    @DisplayName("Get modified parts")
+    void getModifiedParts() throws Exception {
+        Mockito.when(partRepositoryMock.findByLastModificationAfter(Mockito.any()))
+                .thenReturn(PartsFixture.defaultListPartModel());
+        Mockito.when((mapperMock.mapList(Mockito.any(), Mockito.any()))).thenReturn(PartsFixture.defaultListPartDto());
+        List<PartDto> expected = PartsFixture.defaultListPartDto();
+        assertEquals(4, partRepositoryMock.findByLastModificationAfter(LocalDate.of(2016, 07, 11)).size());
+        assertEquals(expected, service.getAllPartsModify(LocalDate.of(2014,01,10), 0));
+    }
 
     @Test
-    @DisplayName("List all available hotels")
-    void listAllHotelsAvailable() throws HotelException {
-        Mockito.when(repositoryMock.loadHotels(any())).thenReturn(HotelDTOFixture.defaultHotels());
-        List<HotelFormatDTO> actual = service.listHotelsAvailable(new HashMap<>());
-        List<HotelFormatDTO> expected = HotelDTOFixture.defaultAvailableHotels();
+    @DisplayName("Get related parts")
+    void getRelatedParts() {
+        List<PartRecord> records = PartsFixture.defaultListPartRecord();
+        List<Part> expected = PartsFixture.defaultListPartModel();
+        List<Part> actual = service.getRelatedParts(records);
         assertEquals(expected, actual);
     }
-     */
+
+    @Test
+    @DisplayName("Get ordered list by description")
+    void orderByDescription() throws Exception {
+        List<Part> expected = PartsFixture.defaultOrderedListPartDescription();
+        List<Part> actual = PartsFixture.defaultListPartModel();
+        service.orderParts(1, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("Get reversed ordered list by description")
+    void orderByDescriptionReversed() throws Exception {
+        List<Part> expected = PartsFixture.defaultOrderedListPartDescriptionReversed();
+        List<Part> actual = PartsFixture.defaultListPartModel();
+        service.orderParts(2, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("Get ordered list by last modification")
+    void orderByPartModification() throws Exception {
+        List<Part> expected = PartsFixture.defaultOrderedListPartLastModification();
+        List<Part> actual = PartsFixture.defaultListPartModel();
+        service.orderParts(3, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("Get ordered list by description")
+    void orderByDescription2() throws Exception {
+        List<PartRecord> expected = PartsFixture.defaultOrderedListPartRecordDescription();
+        List<PartRecord> actual = PartsFixture.defaultListPartRecord();
+        service.orderPartsRecords(1, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("Get reversed ordered list by description")
+    void orderByDescriptionReversed2() throws Exception {
+        List<PartRecord> expected = PartsFixture.defaultOrderedListPartRecordDescriptionReverse();
+        List<PartRecord> actual = PartsFixture.defaultListPartRecord();
+        service.orderPartsRecords(2, actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("Get ordered list by last price modification")
+    void orderByPartModification2() throws Exception {
+        List<PartRecord> expected = PartsFixture.defaultOrderedListPartRecordPrice();
+        List<PartRecord> actual = PartsFixture.defaultListPartRecord();
+        service.orderPartsRecords(3, actual);
+        assertEquals(expected, actual);
+    }
+
 }
