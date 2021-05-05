@@ -3,11 +3,12 @@ package com.mercadolibre.desafio_bootcamp.util;
 import com.mercadolibre.desafio_bootcamp.dto.PartDto;
 import com.mercadolibre.desafio_bootcamp.models.Part;
 import com.mercadolibre.desafio_bootcamp.models.PartRecord;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
+@Component
 public class PartMapper {
 
     public List<PartDto> mapList(List<Part> parts, Boolean isPrice) {
