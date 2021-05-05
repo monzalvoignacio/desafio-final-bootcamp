@@ -1,10 +1,7 @@
-package com.mercadolibre.desafio_bootcamp.dto.responses;
+package com.mercadolibre.desafio_bootcamp.dto;
 
 import com.mercadolibre.desafio_bootcamp.models.DeliveryStatus;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -13,6 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class OrderDetailDto {
     private String partCode;
     private String description;

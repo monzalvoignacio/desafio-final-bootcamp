@@ -17,7 +17,7 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @NotNull
-    private Integer id;
+    private Long id;
     private Integer orderNumberCM;
     private LocalDate orderDate;
     private LocalDate deliveryDate;
@@ -37,8 +37,5 @@ public class Order {
     private CentralHouse centralHouse;
     @OneToMany(mappedBy = "order")
     private List<OrderDetail> orderDetails;
-    @ManyToOne
-    @JoinColumn(name = "order_status_id", nullable = false)
-    private OrderStatus orderStatus;
 
 }

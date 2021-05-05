@@ -1,11 +1,7 @@
 package com.mercadolibre.desafio_bootcamp.dto.responses;
 
-import com.mercadolibre.desafio_bootcamp.dto.PartDto;
-import com.mercadolibre.desafio_bootcamp.models.OrderDetail;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import com.mercadolibre.desafio_bootcamp.dto.OrderDto;
+import lombok.*;
 
 import java.util.List;
 
@@ -13,8 +9,9 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class OrderResponseDto {
-    private Integer dealerNumber;
+    private Long dealerNumber;
     private List<OrderDto> orders;
 
 }

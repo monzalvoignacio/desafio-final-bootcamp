@@ -13,7 +13,7 @@ public class ShippingType {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @NotNull
-    private Integer id;
+    private Long id;
     private String name;
     private String description;
     @OneToMany(mappedBy = "shippingType")
