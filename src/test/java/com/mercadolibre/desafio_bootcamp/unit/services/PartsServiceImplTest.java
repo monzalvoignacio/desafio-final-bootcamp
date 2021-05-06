@@ -1,6 +1,7 @@
 package com.mercadolibre.desafio_bootcamp.unit.services;
 
 import com.mercadolibre.desafio_bootcamp.dto.PartDto;
+import com.mercadolibre.desafio_bootcamp.dto.responses.PartResponseDto;
 import com.mercadolibre.desafio_bootcamp.exceptions.ApiException;
 import com.mercadolibre.desafio_bootcamp.models.Part;
 import com.mercadolibre.desafio_bootcamp.models.PartRecord;
@@ -17,14 +18,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class PartsServiceImplTest {
 
-    // TODO first, refactor main method (split into separate validations)
-    // TODO after refacgoring, tests on main method
+    // TODO after refactoring, tests on main method
 
     private PartsServiceImpl service;
     private PartRepository partRepositoryMock;
@@ -40,9 +41,74 @@ class PartsServiceImplTest {
     }
 
     @Test
-    @DisplayName("First Test")
-    void sum() {
-        assertEquals(2, 1+1);
+    @DisplayName("Main service method successful")
+    void getParts1() throws Exception {
+        Mockito.when(partRepositoryMock.findAll()).thenReturn(PartsFixture.defaultListPartModel());
+        Mockito.when(mapperMock.mapList(Mockito.any(), Mockito.any())).thenReturn(PartsFixture.defaultListPartDto());
+        PartResponseDto expected = PartsFixture.defaultPartResponseDto();
+        PartResponseDto actual = service.getParts("C", "", "");
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("Exception no filters allowed with type C")
+    void getParts2() {
+        Exception e = assertThrows(ApiException.class,
+                () -> service.getParts("C", "", "2"));
+        assertEquals("No filters allow with queryType C", e.getMessage());
+    }
+
+    @Test
+    @DisplayName("Exception invalid date format")
+    void getParts3() {
+        Exception e = assertThrows(ApiException.class,
+                () -> service.getParts("P", "27/02/2001", "0"));
+        assertEquals("Date mapping error. Should be yyyy-MM-dd", e.getMessage());
+    }
+
+    @Test
+    @DisplayName("Exception invalid date format")
+    void getParts4() {
+        Mockito.when(partRepositoryMock.findAll())
+                .thenReturn(PartsFixture.defaultListPartModel());
+        Mockito.when(mapperMock.mapList(Mockito.any(), Mockito.any()))
+                .thenReturn(new ArrayList<>());
+        Exception e = assertThrows(ApiException.class,
+                () -> service.getParts("C", "", ""));
+        assertEquals("404 Not Found", e.getMessage());
+    }
+
+    @Test
+    @DisplayName("Query type C")
+    void validateQueryType1() throws Exception {
+        Mockito.when(partRepositoryMock.findAll()).thenReturn(PartsFixture.defaultListPartModel());
+        Mockito.when(mapperMock.mapList(Mockito.any(), Mockito.any())).thenReturn(PartsFixture.defaultListPartDto());
+        List<PartDto> expected = PartsFixture.defaultListPartDto();
+        List<PartDto> actual = service.queryParts("C", null, 0);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("Query type P")
+    void validateQueryType2() throws Exception {
+        Mockito.when(partRepositoryMock.findByLastModificationAfter(Mockito.any()))
+                .thenReturn(PartsFixture.defaultListPartModel());
+        Mockito.when((mapperMock.mapList(Mockito.any(), Mockito.any())))
+                .thenReturn(PartsFixture.defaultListPartDto());
+        List<PartDto> expected = PartsFixture.defaultListPartDto();
+        List<PartDto> actual = service.queryParts("P", LocalDate.of(2014,01,10), 0);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("Query type V")
+    void validateQueryType3() throws Exception {
+        Mockito.when(partRecordRepositoryMock.findByLastModificationAfter(Mockito.any()))
+                .thenReturn(PartsFixture.defaultListPartRecord());
+        Mockito.when(mapperMock.mapList(Mockito.any(), Mockito.any())).thenReturn(PartsFixture.defaultListPartDtoPriceModification());
+        List<PartDto> expected = PartsFixture.defaultListPartDtoPriceModification();
+        List<PartDto> actual = service.queryParts("V", LocalDate.of(2014,01,10), 0);
+        assertEquals(expected, actual);
     }
 
     @Test

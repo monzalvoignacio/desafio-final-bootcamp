@@ -14,7 +14,7 @@ public class DateMapper {
             return LocalDate.parse(date, format);
         }
         catch (Exception ex){
-            throw new ApiException(HttpStatus.BAD_REQUEST.name(), "Date mapping error", HttpStatus.BAD_REQUEST.value());
+            throw new ApiException(HttpStatus.BAD_REQUEST.name(), "Date mapping error. Should be yyyy-MM-dd", HttpStatus.BAD_REQUEST.value());
         }
     }
 }

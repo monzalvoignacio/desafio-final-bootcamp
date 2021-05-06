@@ -34,7 +34,7 @@ class DateMapperTest {
     void mapDateException() {
         ApiException e = assertThrows(ApiException.class,
                 () -> mapper.mappearFecha("2020/03/19"));
-        assertEquals("Date mapping error", e.getDescription());
+        assertEquals("Date mapping error. Should be yyyy-MM-dd", e.getDescription());
     }
 
 }
