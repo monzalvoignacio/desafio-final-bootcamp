@@ -17,20 +17,6 @@ public class OrderStatusMapper {
         return map(order);
     }
 
-    public List<OrderDetailDto>  mapOrderDetails(List<OrderDetail> orderDetails){
-        List<OrderDetailDto> response = new ArrayList<>();
-        for(OrderDetail od : orderDetails){
-            OrderDetailDto orderDetailDto = new OrderDetailDto();
-            orderDetailDto.setDescription(od.getDescription());
-            orderDetailDto.setQuantity(od.getQuantity());
-            orderDetailDto.setPartCode(od.getPart().getPartCode());
-            orderDetailDto.setReason(od.getReason());
-            orderDetailDto.setAccountType(od.getAccountType().getName());
-            response.add(orderDetailDto);
-        }
-        return response;
-    }
-
     public OrderStatusDto map(Order order){
         OrderStatusDto orderDto = new OrderStatusDto();
         orderDto.setOrderNumberCE(
@@ -40,7 +26,8 @@ public class OrderStatusMapper {
                         + intToCodeString(8, String.valueOf(order.getOrderNumberCM())));
         orderDto.setOrderDate(order.getOrderDate().toString());
         orderDto.setOrderStatus(order.getDeliveryStatus().getCode());
-        orderDto.setOrderDetails(mapOrderDetails(order.getOrderDetails()));
+        OrderMapper orderMapper = new OrderMapper();
+        orderDto.setOrderDetails(orderMapper.mapOrderDetails(order.getOrderDetails()));
         return orderDto;
     }
 
