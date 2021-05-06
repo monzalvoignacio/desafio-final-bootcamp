@@ -103,7 +103,7 @@ public class OrderFixture {
         return order;
     }
 
-    public static Order q() {
+    public static Order defaultOrder1() {
         Order order = new Order();
         order.setId(1L);
         order.setOrderNumberCM(3);
