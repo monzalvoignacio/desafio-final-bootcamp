@@ -31,7 +31,7 @@ public class OrderStatusMapper {
         return orderDto;
     }
 
-    private String intToCodeString(int len, String aux) {
+    public String intToCodeString(int len, String aux) {
         String res = "";
         for (int j = 0; j < len - aux.length(); j++) {
             res = res + "0";

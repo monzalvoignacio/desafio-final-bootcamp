@@ -2,6 +2,7 @@ package com.mercadolibre.desafio_bootcamp.unit.fixtures;
 
 import com.mercadolibre.desafio_bootcamp.dto.OrderDetailDto;
 import com.mercadolibre.desafio_bootcamp.dto.OrderDto;
+import com.mercadolibre.desafio_bootcamp.dto.responses.OrderStatusDto;
 import com.mercadolibre.desafio_bootcamp.models.*;
 
 import java.util.List;
@@ -39,6 +40,19 @@ public class OrderFixture {
         list.add(defaultOrderDetail1());
         list.add(defaultOrderDetail2());
         return list;
+    }
+
+    public static OrderStatusDto defaultOrderStatusDto1(){
+        OrderStatusDto orderStatusDto = new OrderStatusDto();
+        orderStatusDto.setOrderNumberCE("0001-00000003");
+        orderStatusDto.setOrderDate("2020-05-23");
+        orderStatusDto.setOrderStatus("P");
+        List<OrderDetailDto> orderDetails = new ArrayList<>();
+        orderDetails.add(defaultOrderDetailDto1());
+        orderStatusDto.setOrderDetails(orderDetails);
+
+
+        return orderStatusDto;
     }
 
     public static OrderDto defaultOrderDto1() {
