@@ -1,20 +1,16 @@
 package com.mercadolibre.desafio_bootcamp.services;
 
 import com.mercadolibre.desafio_bootcamp.dto.OrderDto;
-import com.mercadolibre.desafio_bootcamp.dto.PartDto;
 import com.mercadolibre.desafio_bootcamp.dto.responses.OrderResponseDto;
-import com.mercadolibre.desafio_bootcamp.dto.responses.PartResponseDto;
+import com.mercadolibre.desafio_bootcamp.dto.responses.OrderStatusDto;
 import com.mercadolibre.desafio_bootcamp.exceptions.ApiException;
 import com.mercadolibre.desafio_bootcamp.models.*;
 import com.mercadolibre.desafio_bootcamp.repositories.*;
-import com.mercadolibre.desafio_bootcamp.util.DateMapper;
 import com.mercadolibre.desafio_bootcamp.util.OrderMapper;
-import com.mercadolibre.desafio_bootcamp.util.PartMapper;
+import com.mercadolibre.desafio_bootcamp.util.OrderStatusMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -25,14 +21,16 @@ public class OrderServiceImpl implements OrdersService{
     private ConcessioanrieRepository repoConcessionary;
     private DeliveryStatusRepository repoDeliveryStatus;
     private OrderMapper orderMapper;
+    private OrderStatusMapper orderStatusMapper;
 
 
     public OrderServiceImpl(ConcessioanrieRepository repoConcessionary, DeliveryStatusRepository repoDeliveryStatus,
-                                OrderRepository repoOrders, OrderMapper mapper){
+                            OrderRepository repoOrders, OrderMapper mapper, OrderStatusMapper orderStatusMapper){
         this.repoConcessionary = repoConcessionary;
         this.repoDeliveryStatus = repoDeliveryStatus;
         this.repoOrders = repoOrders;
         this.orderMapper = mapper;
+        this.orderStatusMapper = orderStatusMapper;
     }
 
 
@@ -93,5 +91,30 @@ public class OrderServiceImpl implements OrdersService{
         List<OrderDto> orderDtos = orderMapper.mapList(orders);
         OrderResponseDto orderResponseDto = new OrderResponseDto(dealerNumber, orderDtos);
         return orderResponseDto;
+    }
+
+//    Validar largo strings
+    @Override
+    public OrderStatusDto getOrderStatus(String code) {
+        String[] res = code.split("-");
+        validateCodes(res);
+        Long dealerNumber = Long.parseLong(res[1]);
+        Long numberCE = Long.parseLong(res[0]);
+        Integer orderCode = Integer.parseInt(res[2]);
+        List<Order> order = repoOrders.findOrderByConcessionarieIdEqualsAndCentralHouseIdEqualsAndOrderNumberCMEquals(dealerNumber, numberCE, orderCode);
+        OrderStatusDto orderDtos = orderStatusMapper.mapList(order.get(0));
+        return orderDtos;
+    }
+
+    private void validateCodes(String[] codes) {
+        if (codes[0].length() != 4)
+                throw new ApiException
+                        (HttpStatus.UNPROCESSABLE_ENTITY.name(), "Central House code must have 4 digits", HttpStatus.UNPROCESSABLE_ENTITY.value());
+        if (codes[1].length() != 4)
+            throw new ApiException
+                    (HttpStatus.UNPROCESSABLE_ENTITY.name(), "Dealer code must have 4 digits", HttpStatus.UNPROCESSABLE_ENTITY.value());
+        if (codes[2].length() != 8)
+            throw new ApiException
+                    (HttpStatus.UNPROCESSABLE_ENTITY.name(), "Order code must have 8 digits", HttpStatus.UNPROCESSABLE_ENTITY.value());
     }
 }
