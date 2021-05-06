@@ -35,6 +35,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/api/v1/parts")
                 .authenticated()
+                .antMatchers("/api/v1/parts/orders")
+                .authenticated()
                 .and()
                 .httpBasic();
     }
