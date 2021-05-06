@@ -120,7 +120,7 @@
                     <excludes>
                         <exclude>**/com/mercadolibre/**/dto/**</exclude>
                         <exclude>**/com/mercadolibre/**/api/**</exclude>
-                        <exclude>**/com/mercadolibre/**/model/**</exclude>
+                        <exclude>**/com/mercadolibre/**/models/**</exclude>
                         <exclude>**/com/mercadolibre/**/exceptions/**</exclude>
                     </excludes>
                 </configuration>

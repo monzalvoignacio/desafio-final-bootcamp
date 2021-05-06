@@ -25,8 +25,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class PartsServiceImplTest {
 
-    // TODO after refactoring, tests on main method
-
     private PartsServiceImpl service;
     private PartRepository partRepositoryMock;
     private PartRecordRepository partRecordRepositoryMock;

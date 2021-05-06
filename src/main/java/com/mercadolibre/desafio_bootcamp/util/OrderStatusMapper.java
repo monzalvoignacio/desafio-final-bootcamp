@@ -21,8 +21,7 @@ public class OrderStatusMapper {
         OrderStatusDto orderDto = new OrderStatusDto();
         orderDto.setOrderNumberCE(
                 intToCodeString(4,
-                        String.valueOf(order.getConcessionarie().getId()))
-                        + "-"
+                        String.valueOf(order.getConcessionarie().getId())) + "-"
                         + intToCodeString(8, String.valueOf(order.getOrderNumberCM())));
         orderDto.setOrderDate(order.getOrderDate().toString());
         orderDto.setOrderStatus(order.getDeliveryStatus().getCode());
@@ -33,9 +32,8 @@ public class OrderStatusMapper {
 
     public String intToCodeString(int len, String aux) {
         String res = "";
-        for (int j = 0; j < len - aux.length(); j++) {
+        for (int j = 0; j < len - aux.length(); j++)
             res = res + "0";
-        }
         return res + aux;
     }
 }

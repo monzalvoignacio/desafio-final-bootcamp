@@ -61,7 +61,7 @@ public class OrderFixture {
         return new OrderDto(3, "2020-05-23", "2020-11-09", 10, "P", listOrderDetail);
     }
 
-    public static OrderStatusDto defaultOrderStatusDto1() {
+    public static OrderStatusDto defaultOrderStatusDto2() {
         return new OrderStatusDto
                 ("0001-00000001","2020-11-09","P",defaultOrderDetailDtoList());
     }
