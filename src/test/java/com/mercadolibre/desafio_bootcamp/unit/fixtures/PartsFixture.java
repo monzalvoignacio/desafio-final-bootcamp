@@ -1,14 +1,21 @@
 package com.mercadolibre.desafio_bootcamp.unit.fixtures;
 
 import com.mercadolibre.desafio_bootcamp.dto.PartDto;
+import com.mercadolibre.desafio_bootcamp.dto.responses.PartResponseDto;
 import com.mercadolibre.desafio_bootcamp.models.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class PartsFixture {
+
+    // create a response dto
+    public static PartResponseDto defaultPartResponseDto() {
+        return new PartResponseDto(defaultListPartDto());
+    }
 
     // create a single PartDto object
     public static PartDto defaultPartDto() {

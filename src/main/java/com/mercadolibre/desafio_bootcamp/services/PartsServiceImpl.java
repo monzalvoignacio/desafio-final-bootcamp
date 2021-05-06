@@ -34,14 +34,13 @@ public class PartsServiceImpl implements PartsService{
         this.mapper = mapper;
     }
 
+    // receives controller input and returns the dto response object back to controller
     @Override
     public PartResponseDto getParts(String queryType, String date, String order) throws Exception {
-        // Se valida el queryType, en caso de ser C no debemos validar fechas ni nada por el estilo, solo arrojamos una excepción pq son filtros que no deben incluirse
-        // Caso contrario se debe mappear la fecha, dónde se valida también que el formato sea correcto yyyy-MM-dd
-        LocalDate fecha = null;
+        LocalDate dateLocal = null;
         Integer orderInt = null;
         if (!queryType.equals("C")){
-            fecha = DateMapper.mappearFecha(date);
+            dateLocal = DateMapper.mappearFecha(date);
             orderInt = validateOrder(order);
         }
         else{
@@ -49,19 +48,7 @@ public class PartsServiceImpl implements PartsService{
                 throw new ApiException(HttpStatus.BAD_REQUEST.name(), "No filters allow with queryType C", HttpStatus.BAD_REQUEST.value());
             }
         }
-        List<PartDto> listParts = new ArrayList<>();
-        // Dependiendo el queryType indicado (por defceto C) obtenemos los datos
-        switch (queryType){
-            case "C":
-                listParts = getAllParts();
-                break;
-            case "P":
-                listParts = getAllPartsModify(fecha, orderInt);
-                break;
-            case "V":
-                listParts = getAllPartsPriceMod(fecha,orderInt);
-                break;
-        }
+        List<PartDto> listParts = queryParts(queryType, dateLocal, orderInt);
 
         if(listParts != null && listParts.isEmpty())
         {
@@ -71,6 +58,23 @@ public class PartsServiceImpl implements PartsService{
         return new PartResponseDto(listParts);
     }
 
+    // get the parts according the query type
+    public List<PartDto> queryParts(String query, LocalDate date, Integer order) throws Exception {
+        List<PartDto> listParts = null;
+        switch (query){
+            case "C":
+                listParts = getAllParts();
+                break;
+            case "P":
+                listParts = getAllPartsModify(date, order);
+                break;
+            case "V":
+                listParts = getAllPartsPriceMod(date,order);
+                break;
+        }
+        return listParts;
+    }
+    // validates order input
     public Integer validateOrder(String order){
         Integer orderInt = null;
         try {
@@ -85,12 +89,14 @@ public class PartsServiceImpl implements PartsService{
         return orderInt;
     }
 
+    // gets all parts without filtering
     public List<PartDto> getAllParts(){
         var result =  this.repoParts.findAll();
         ArrayList<PartDto> parts = new ArrayList<>();
         return mapper.mapList(result, false);
     }
 
+    // gets every part which price was modified after the date input
     public List<PartDto> getAllPartsPriceMod(LocalDate date, Integer order) throws Exception {
         List<PartRecord> result = this.repoPartRecords.findByLastModificationAfter(date);
         if (order > 0){
@@ -100,6 +106,7 @@ public class PartsServiceImpl implements PartsService{
         return mapper.mapList(parts, true);
     }
 
+    // gets the parts related to the part records
     public List<Part> getRelatedParts(List<PartRecord> records) {
         List<Part> parts = new ArrayList<>();
         for(PartRecord p: records){
@@ -108,6 +115,7 @@ public class PartsServiceImpl implements PartsService{
         return parts;
     }
 
+    // gets every part modified after the date input
     public List<PartDto> getAllPartsModify(LocalDate date, Integer order) throws Exception {
         List<Part> result = this.repoParts.findByLastModificationAfter(date);
         if(order > 0){
