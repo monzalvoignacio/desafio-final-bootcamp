@@ -6,6 +6,7 @@ import com.mercadolibre.desafio_bootcamp.dto.responses.OrderStatusDto;
 import com.mercadolibre.desafio_bootcamp.dto.responses.PartResponseDto;
 import com.mercadolibre.desafio_bootcamp.exceptions.ApiException;
 import com.mercadolibre.desafio_bootcamp.models.Concessionarie;
+import com.mercadolibre.desafio_bootcamp.models.DeliveryStatus;
 import com.mercadolibre.desafio_bootcamp.models.Order;
 import com.mercadolibre.desafio_bootcamp.repositories.*;
 import com.mercadolibre.desafio_bootcamp.services.OrderServiceImpl;
@@ -22,8 +23,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -132,8 +135,55 @@ public class OrderServiceImplTest {
         assertEquals("order must be between 1 or 2", e.getMessage());
     }
 
+    @Test
+    @DisplayName("unexisting order throws exception")
+    void unexistingOrderThrowsExceptionTest() throws Exception {
+        String validCode = "0001-0001-00000001";
+        Long validDealerNumber = 1L;
+        Integer validOrder = 2;
+        Order order = OrderFixture.defaultOrder1();
+        Concessionarie concessionarie = order.getConcessionarie();
+        List<Concessionarie> concessionaries = new ArrayList<>();
+        concessionaries.add(concessionarie);
+        Mockito.when(repoConcessionaryMock.findById(Mockito.any())).thenReturn(concessionaries.stream().findAny());
+        Mockito.when(orderRepositoryMock.findOrderByConcessionarieIdEquals(order.getConcessionarie().getId())).
+                thenReturn(new ArrayList<Order>());
+        Exception e = assertThrows(ApiException.class,
+                () -> service.getOrders(validDealerNumber,"",validOrder));
+        assertEquals("No orders found for this concessionaire", e.getMessage());
+    }
+
+    @Test
+    @DisplayName("No concessionarie found exception")
+    void noConcessionarieFoundExceptionTest() throws Exception{
+        Integer validOrder = 2;
+        Optional<Concessionarie> option = Optional.empty();
+        Mockito.when(repoConcessionaryMock.findById(Mockito.any())).thenReturn(option);
+        Exception e = assertThrows(ApiException.class,
+                () -> service.getOrders(2L,"",validOrder));
+        assertEquals("Concessionary not found", e.getMessage());
+
+    }
 
 
+    @Test
+    @DisplayName("Invalid delivery status throws exception")
+    void invalidDeliveryStatusThrowsExceptionTest() throws Exception {
+        String validCode = "0001-0001-00000001";
+        Long validDealerNumber = 1L;
+        Integer validOrder = 2;
+        String invalidDeliveryStatus = "Z";
+        Order order = OrderFixture.defaultOrder1();
+        Concessionarie concessionarie = order.getConcessionarie();
+        List<Concessionarie> concessionaries = new ArrayList<>();
+        concessionaries.add(concessionarie);
+        Mockito.when(repoConcessionaryMock.findById(Mockito.any())).thenReturn(concessionaries.stream().findAny());
+        ArrayList<DeliveryStatus> emptyDeliveryStatus = new ArrayList<>();
+        Mockito.when(repoDeliveryStatusMock.findByCodeEquals(invalidDeliveryStatus)).thenReturn(emptyDeliveryStatus);
+        Exception e = assertThrows(ApiException.class,
+                () -> service.getOrders(validDealerNumber, invalidDeliveryStatus, validOrder));
+        assertEquals("No such delivery status found", e.getMessage());
+    }
 
     /*
     CustomException thrown = assertThrows(
@@ -145,5 +195,8 @@ public class OrderServiceImplTest {
         assertTrue(thrown.getTitle().contains("Destination Error"));
 
      */
+
+
+
 
 }
