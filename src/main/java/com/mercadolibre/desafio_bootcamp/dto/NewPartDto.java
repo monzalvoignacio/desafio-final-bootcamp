@@ -5,39 +5,44 @@ import com.mercadolibre.desafio_bootcamp.models.OrderDetail;
 import com.mercadolibre.desafio_bootcamp.models.PartRecord;
 import com.mercadolibre.desafio_bootcamp.models.Provider;
 import com.mercadolibre.desafio_bootcamp.models.Stock;
+import com.mercadolibre.desafio_bootcamp.util.DateMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class NewPartDto{
-    private Long id;
-    @JsonProperty("orderNumber")
+    @JsonProperty("partCode")
     private String partCode;
     private String description;
-    @JsonProperty("orderNumber")
+    @JsonProperty("providerId")
     private Long providerId;
     private Integer stock;
-    @JsonProperty("orderNumber")
+    @JsonProperty("netWeight")
     private Integer netWeight;
-    @JsonProperty("orderNumber")
+    @JsonProperty("longDimension")
     private Integer longDimension;
-    @JsonProperty("orderNumber")
+    @JsonProperty("widthDimension")
     private Integer widthDimension;
-    @JsonProperty("orderNumber")
+    @JsonProperty("talDimension")
     private Integer talDimension;
-    @JsonProperty("orderNumber")
+    @JsonProperty("lastModification")
     private LocalDate lastModification;
-    @JsonProperty("orderNumber")
+    @JsonProperty("discountTypeId")
     private Long discountTypeId;
-    @JsonProperty("orderNumber")
+    @JsonProperty("normalPrice")
     private Double normalPrice;
-    @JsonProperty("orderNumber")
+    @JsonProperty("urgentPrice")
     private Double urgentPrice;
+
+    public void setLastModification(String lastModification) throws Exception {
+        this.lastModification = DateMapper.mappearFecha(lastModification);
+    }
 }

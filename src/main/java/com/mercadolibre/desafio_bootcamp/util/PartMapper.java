@@ -3,6 +3,7 @@ package com.mercadolibre.desafio_bootcamp.util;
 import com.mercadolibre.desafio_bootcamp.dto.NewPartDto;
 import com.mercadolibre.desafio_bootcamp.dto.PartDto;
 import com.mercadolibre.desafio_bootcamp.models.*;
+import com.mercadolibre.desafio_bootcamp.repositories.PartRecordRepository;
 import net.bytebuddy.asm.Advice;
 import org.springframework.stereotype.Component;
 import org.springframework.context.annotation.Bean;
@@ -12,11 +13,11 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Component
 public class PartMapper {
-
 
 
     public List<PartDto> mapList(List<Part> parts, Boolean isPrice) {
@@ -29,21 +30,27 @@ public class PartMapper {
 
     public Part reverseMap(NewPartDto newPart, Provider provider){
         Part part = new Part();
-        part.setId(part.getId());
-        part.setPartCode(part.getPartCode());
-        part.setDescription(part.getDescription());
+        part.setPartCode(newPart.getPartCode());
+        part.setDescription(newPart.getDescription());
         part.setProvider(provider);
-        part.setStock(part.getStock());
-        part.setNetWeight(part.getNetWeight());
-        part.setLongDimension(part.getLongDimension());
-        part.setWidthDimenion(part.getWidthDimenion());
-        part.setTalDimension(part.getTalDimension());
+        Stock stock = new Stock();
+        stock.setQuantity(newPart.getStock());
+        stock.setPart(part);
+        part.setStock(stock);
+        part.setNetWeight(newPart.getNetWeight());
+        part.setLongDimension(newPart.getLongDimension());
+        part.setWidthDimenion(newPart.getWidthDimension());
+        part.setTalDimension(newPart.getTalDimension());
         part.setLastModification(LocalDate.now());// hoy
         PartRecord partRecord = new PartRecord();
         partRecord.setLastModification(LocalDate.now());
         partRecord.setDiscountType(null);
         partRecord.setNormalPrice(newPart.getNormalPrice());
         partRecord.setUrgentPrice(newPart.getUrgentPrice());
+        partRecord.setPart(part);
+        ArrayList<PartRecord> partRecords = new ArrayList<>();
+        partRecords.add(partRecord);
+        part.setPartRecords(partRecords);
         return part;
     }
 

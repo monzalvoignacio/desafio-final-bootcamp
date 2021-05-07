@@ -22,10 +22,7 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class PartsServiceImpl implements PartsService{
@@ -83,8 +80,8 @@ public class PartsServiceImpl implements PartsService{
 
     @Override
     public NewPartDto createPart(NewPartDto newPart) {
-        String id = newPart.getPartCode();
-        Part part = repoParts.findPartByPartCode(id).orElse(null);
+        String partCode = newPart.getPartCode();
+        Part part = repoParts.findPartByPartCode(partCode).orElse(null);
         if (part != null){
             Integer newStock = Integer.valueOf(newPart.getStock());
             updateStock(part, newStock);
