@@ -18,7 +18,7 @@ public class PartRecord {
     private Double normalPrice;
     private Double urgentPrice;
     private LocalDate lastModification;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "part_id", nullable = false)
     private Part part;
 }

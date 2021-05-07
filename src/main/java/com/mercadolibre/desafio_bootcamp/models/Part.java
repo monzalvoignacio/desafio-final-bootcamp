@@ -25,7 +25,7 @@ public class Part {
     private Integer widthDimenion;
     private Integer talDimension;
     private LocalDate lastModification;
-    @OneToMany(mappedBy = "part")
+    @OneToMany(mappedBy = "part",cascade = CascadeType.ALL)
     private List<PartRecord> partRecords;
     @OneToMany(mappedBy = "part")
     private List<OrderDetail> orderDetails;
