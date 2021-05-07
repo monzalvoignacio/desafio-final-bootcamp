@@ -70,6 +70,21 @@ public class PartsServiceImpl implements PartsService{
         repoParts.save(part);
     }
 
+    public Integer updateStock(String partCode, Integer quantity){
+        if (quantity<0){
+            throw new ApiException(HttpStatus.BAD_REQUEST.name(), "Negative quantity", HttpStatus.BAD_REQUEST.value());
+        }
+        Part part = repoParts.findPartByPartCode(partCode).orElse(null);
+        if (part == null){
+            throw new ApiException(HttpStatus.BAD_REQUEST.name(), "No such part exists", HttpStatus.BAD_REQUEST.value());
+        }
+        Integer currentStock = part.getStock().getQuantity();
+        Integer newStock = currentStock + quantity;
+        part.getStock().setQuantity(newStock);
+        repoParts.save(part);
+        return newStock;
+    }
+
     private Provider validateProvider(Long providerId){
         Provider provider = repoProvider.findProviderById(providerId).orElse(null);
         if (provider == null){

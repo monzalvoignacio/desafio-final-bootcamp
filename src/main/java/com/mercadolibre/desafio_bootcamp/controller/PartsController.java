@@ -28,4 +28,11 @@ public class PartsController {
     public ResponseEntity createPart(@RequestBody NewPartDto newPart){
         return new ResponseEntity(service.createPart(newPart), HttpStatus.CREATED);
     }
+
+    @PatchMapping
+    public ResponseEntity createPart(@RequestParam(name = "partCode") String partCode,
+                                     @RequestParam(name = "quantity") Integer quantity){
+        return new ResponseEntity(service.updateStock(partCode, quantity), HttpStatus.CREATED);
+    }
+
 }
