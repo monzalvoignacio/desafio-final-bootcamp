@@ -7,6 +7,7 @@ import com.mercadolibre.desafio_bootcamp.models.Part;
 import com.mercadolibre.desafio_bootcamp.models.PartRecord;
 import com.mercadolibre.desafio_bootcamp.repositories.PartRecordRepository;
 import com.mercadolibre.desafio_bootcamp.repositories.PartRepository;
+import com.mercadolibre.desafio_bootcamp.repositories.ProviderRepository;
 import com.mercadolibre.desafio_bootcamp.services.PartsServiceImpl;
 import com.mercadolibre.desafio_bootcamp.unit.fixtures.PartsFixture;
 import com.mercadolibre.desafio_bootcamp.util.MockitoExtension;
@@ -28,6 +29,7 @@ class PartsServiceImplTest {
     private PartsServiceImpl service;
     private PartRepository partRepositoryMock;
     private PartRecordRepository partRecordRepositoryMock;
+    private ProviderRepository providerRepositoryMock;
     private PartMapper mapperMock;
 
     @BeforeEach
@@ -35,7 +37,8 @@ class PartsServiceImplTest {
         partRepositoryMock = Mockito.mock(PartRepository.class);
         partRecordRepositoryMock = Mockito.mock(PartRecordRepository.class);
         mapperMock = Mockito.mock(PartMapper.class);
-        service = new PartsServiceImpl(partRepositoryMock, partRecordRepositoryMock, mapperMock);
+        service = new PartsServiceImpl(partRepositoryMock, partRecordRepositoryMock,
+                mapperMock, providerRepositoryMock);
     }
 
     @Test

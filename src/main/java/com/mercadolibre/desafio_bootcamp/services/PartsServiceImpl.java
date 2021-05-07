@@ -2,24 +2,30 @@ package com.mercadolibre.desafio_bootcamp.services;
 
 import com.google.common.reflect.TypeToken;
 import com.google.protobuf.Api;
+import com.mercadolibre.desafio_bootcamp.dto.NewPartDto;
 import com.mercadolibre.desafio_bootcamp.dto.PartDto;
 import com.mercadolibre.desafio_bootcamp.dto.responses.PartResponseDto;
 import com.mercadolibre.desafio_bootcamp.exceptions.ApiException;
 import com.mercadolibre.desafio_bootcamp.models.Part;
 import com.mercadolibre.desafio_bootcamp.models.PartRecord;
+import com.mercadolibre.desafio_bootcamp.models.Provider;
 import com.mercadolibre.desafio_bootcamp.repositories.PartRecordRepository;
 import com.mercadolibre.desafio_bootcamp.repositories.PartRepository;
+import com.mercadolibre.desafio_bootcamp.repositories.ProviderRepository;
 import com.mercadolibre.desafio_bootcamp.util.DateMapper;
 import com.mercadolibre.desafio_bootcamp.util.PartMapper;
+import org.aspectj.apache.bcel.classfile.Module;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PartsServiceImpl implements PartsService{
@@ -27,11 +33,14 @@ public class PartsServiceImpl implements PartsService{
     private PartRepository repoParts;
     private PartRecordRepository repoPartRecords;
     private PartMapper mapper;
+    private ProviderRepository repoProvider;
 
-    public PartsServiceImpl(PartRepository repoParts, PartRecordRepository repoPartRecords, PartMapper mapper){
+    public PartsServiceImpl(PartRepository repoParts, PartRecordRepository repoPartRecords,
+                            PartMapper mapper, ProviderRepository repoProvider){
         this.repoParts = repoParts;
         this.repoPartRecords = repoPartRecords;
         this.mapper = mapper;
+        this.repoProvider = repoProvider;
     }
 
     // receives controller input and returns the dto response object back to controller
@@ -56,6 +65,37 @@ public class PartsServiceImpl implements PartsService{
         }
 
         return new PartResponseDto(listParts);
+    }
+
+    public void updateStock(Part part, Integer newStock){
+        Integer currentStock = part.getStock().getQuantity();
+        part.getStock().setQuantity(currentStock + newStock);
+        repoParts.save(part);
+    }
+
+    private Provider validateProvider(Long providerId){
+        Provider provider = repoProvider.findProviderById(providerId).orElse(null);
+        if (provider == null){
+            throw new ApiException(HttpStatus.BAD_REQUEST.name(), "No such provider exists", HttpStatus.BAD_REQUEST.value());
+        }
+        else return provider;
+    }
+
+    @Override
+    public NewPartDto createPart(NewPartDto newPart) {
+        String id = newPart.getPartCode();
+        Part part = repoParts.findPartByPartCode(id).orElse(null);
+        if (part != null){
+            Integer newStock = Integer.valueOf(newPart.getStock());
+            updateStock(part, newStock);
+        }
+        else{
+            Long providerId = newPart.getProviderId();
+            Provider provider =  validateProvider(providerId);
+            part = mapper.reverseMap(newPart, provider);
+            repoParts.save(part);
+        }
+        return newPart;
     }
 
     // get the parts according the query type
