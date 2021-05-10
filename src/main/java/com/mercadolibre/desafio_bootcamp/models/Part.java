@@ -29,4 +29,6 @@ public class Part {
     private List<PartRecord> partRecords;
     @OneToMany(mappedBy = "part")
     private List<OrderDetail> orderDetails;
+    @OneToMany(mappedBy = "part")
+    private List<StockCentralHouse> stockCentralHouses;
 }

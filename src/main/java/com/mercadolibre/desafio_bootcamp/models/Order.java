@@ -35,7 +35,7 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "central_house_id", nullable = false)
     private CentralHouse centralHouse;
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetails;
 
 }
