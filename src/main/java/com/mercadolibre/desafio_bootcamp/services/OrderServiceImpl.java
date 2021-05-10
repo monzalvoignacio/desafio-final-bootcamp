@@ -1,6 +1,10 @@
 package com.mercadolibre.desafio_bootcamp.services;
 
+import com.mercadolibre.desafio_bootcamp.dto.OrderDetailDto;
 import com.mercadolibre.desafio_bootcamp.dto.OrderDto;
+import com.mercadolibre.desafio_bootcamp.dto.OrderRequestDto;
+import com.mercadolibre.desafio_bootcamp.dto.responses.BasicResponseDto;
+import com.mercadolibre.desafio_bootcamp.dto.responses.GenerateOrderResponseDto;
 import com.mercadolibre.desafio_bootcamp.dto.responses.OrderResponseDto;
 import com.mercadolibre.desafio_bootcamp.dto.responses.OrderStatusDto;
 import com.mercadolibre.desafio_bootcamp.exceptions.ApiException;
@@ -8,9 +12,13 @@ import com.mercadolibre.desafio_bootcamp.models.*;
 import com.mercadolibre.desafio_bootcamp.repositories.*;
 import com.mercadolibre.desafio_bootcamp.util.OrderMapper;
 import com.mercadolibre.desafio_bootcamp.util.OrderStatusMapper;
+import com.mercadolibre.desafio_bootcamp.util.OrderUtil;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -21,16 +29,32 @@ public class OrderServiceImpl implements OrdersService{
     private ConcessioanrieRepository repoConcessionary;
     private DeliveryStatusRepository repoDeliveryStatus;
     private OrderMapper orderMapper;
+    private OrderUtil orderUtil;
     private OrderStatusMapper orderStatusMapper;
+    private CentralHouseRepository repoCentralHouse;
+    private ShippingTypeRepository repoShippingType;
+    private PartRepository repoParts;
+    private OrderDetailRepository repoOrderDetail;
+    private StockCentralHouseRepository repoStockCentralHouse;
+    private AccountTypeRepository repoAccountType;
 
 
     public OrderServiceImpl(ConcessioanrieRepository repoConcessionary, DeliveryStatusRepository repoDeliveryStatus,
-                            OrderRepository repoOrders, OrderMapper mapper, OrderStatusMapper orderStatusMapper){
+                            OrderRepository repoOrders, OrderMapper mapper, OrderStatusMapper orderStatusMapper, CentralHouseRepository repoCH,
+                            ShippingTypeRepository repoST, PartRepository repoP, OrderUtil oUtil, OrderDetailRepository repoOD, StockCentralHouseRepository repoCHS,
+                            AccountTypeRepository repoAT){
         this.repoConcessionary = repoConcessionary;
         this.repoDeliveryStatus = repoDeliveryStatus;
         this.repoOrders = repoOrders;
         this.orderMapper = mapper;
         this.orderStatusMapper = orderStatusMapper;
+        this.repoCentralHouse = repoCH;
+        this.repoShippingType = repoST;
+        this.repoParts = repoP;
+        this.orderUtil = oUtil;
+        this.repoOrderDetail = repoOD;
+        this.repoStockCentralHouse = repoCHS;
+        this.repoAccountType = repoAT;
     }
 
 
@@ -106,6 +130,131 @@ public class OrderServiceImpl implements OrdersService{
         return orderDtos;
     }
 
+    @Override
+    public GenerateOrderResponseDto generateOrder(OrderRequestDto request) {
+        validateRequest(request);
+        validateRequestParts(request.getParts());
+        CentralHouse centralHouse = repoCentralHouse.findById(request.getCentralHouseId()).orElse(null);
+        ShippingType shippingType = repoShippingType.findByNameEquals(request.getShippingType()).orElse(null);
+        Concessionarie concessionarie = repoConcessionary.findById(request.getConsessionarieId()).orElse(null);
+        DeliveryStatus deliveryStatus = repoDeliveryStatus.findByCodeEquals("P").stream().findFirst().orElse(null);
+        Order lastOrder = repoOrders.findAll().stream().
+                sorted((a, b) -> b.getOrderNumberCM().compareTo(a.getOrderNumberCM())).findFirst().orElse(null);
+        Integer newOrderNumberCM = lastOrder.getOrderNumberCM() + 1;
+
+        Order newOrder = orderUtil.generateOrder(concessionarie, shippingType, centralHouse, deliveryStatus, newOrderNumberCM);
+
+        List<OrderDetail> orderDetails = orderUtil.reverseMapOrderDetailDto(request.getParts(), newOrder);
+        newOrder.setOrderDetails(orderDetails);
+        AccountType accountType = repoAccountType.findByNameEquals("R").orElse(null);
+
+        for(OrderDetail od: orderDetails)
+        {
+            updateStock(od.getPart(), od.getQuantity(),centralHouse);
+            od.setAccountType(accountType);
+        }
+
+        repoOrders.save(newOrder);
+
+        GenerateOrderResponseDto resp = new GenerateOrderResponseDto(newOrder.getOrderNumberCM().toString(), newOrder.getCentralHouse().getId());
+
+        return resp;
+    }
+
+    @Override
+    public BasicResponseDto updateOrderStatus(Integer orderNumberCM, String orderStatus) {
+        Order order = repoOrders.findByOrderNumberCMEquals(orderNumberCM).orElse(null);
+        if (order == null){
+            throw new ApiException
+                    (HttpStatus.BAD_REQUEST.name(), "Order not found", HttpStatus.BAD_REQUEST.value());
+        }
+
+        DeliveryStatus deliveryStatus = repoDeliveryStatus.findByCodeEquals(orderStatus).stream().findFirst().orElse(null);
+        if (deliveryStatus == null){
+            throw new ApiException
+                    (HttpStatus.BAD_REQUEST.name(), "Delivery Status not found", HttpStatus.BAD_REQUEST.value());
+        }
+        validateOrderStatus(deliveryStatus, order);
+
+        if (deliveryStatus.getCode().equals("C")){
+            List<OrderDetail> details = order.getOrderDetails();
+            for(OrderDetail orderDetail: details){
+                Integer stockCM = orderDetail.getPart().getStock().getQuantity();
+                Integer quantityOrder = orderDetail.getQuantity();
+                orderDetail.getPart().getStock().setQuantity(stockCM + quantityOrder);
+                StockCentralHouse stockCentralHouse = repoStockCentralHouse.findByPartIdEqualsAndCentralHouseIdEquals(orderDetail.getPart().getId(),
+                        order.getCentralHouse().getId());
+                stockCentralHouse.setQuantity(stockCentralHouse.getQuantity() - quantityOrder);
+                repoParts.save(orderDetail.getPart());
+            }
+        }
+        order.setDeliveryStatus(deliveryStatus);
+        repoOrders.save(order);
+
+        return new BasicResponseDto(HttpStatus.OK, "Order status updated");
+    }
+
+    public void validateOrderStatus(DeliveryStatus deliveryStatus, Order order){
+        if (order.getDeliveryStatus().equals(deliveryStatus)){
+            throw new ApiException
+                    (HttpStatus.BAD_REQUEST.name(), "Order is already in that state", HttpStatus.BAD_REQUEST.value());
+        }
+        if (order.getDeliveryStatus().getCode().equals("C")){
+            throw new ApiException
+                    (HttpStatus.BAD_REQUEST.name(), "Order canceled, you can't update the status", HttpStatus.BAD_REQUEST.value());
+        }
+        if (order.getDeliveryStatus().getCode().equals("F")){
+            throw new ApiException
+                    (HttpStatus.BAD_REQUEST.name(), "Order finished, you can't update the status", HttpStatus.BAD_REQUEST.value());
+        }
+    }
+
+    public void validateRequest(OrderRequestDto req){
+        CentralHouse centralHouse = repoCentralHouse.findById(req.getCentralHouseId()).orElse(null);
+        if (centralHouse == null){
+            throw new ApiException
+                    (HttpStatus.BAD_REQUEST.name(), "Central house not found", HttpStatus.BAD_REQUEST.value());
+        }
+        Concessionarie consessionary = repoConcessionary.findById(req.getConsessionarieId()).orElse(null);
+        if(consessionary == null){
+            throw new ApiException
+                    (HttpStatus.BAD_REQUEST.name(), "Concessionary not found", HttpStatus.BAD_REQUEST.value());
+        }
+        ShippingType shippingType = repoShippingType.findByNameEquals(req.getShippingType()).orElse(null);
+        if(shippingType == null){
+            throw new ApiException
+                    (HttpStatus.BAD_REQUEST.name(), "Shipping Type not found", HttpStatus.BAD_REQUEST.value());
+        }
+    }
+
+    public void validateRequestParts(List<OrderDetailDto> parts){
+        for (OrderDetailDto oDetail: parts){
+            Part part = repoParts.findPartByPartCode(oDetail.getPartCode()).orElse(null);
+            if(part == null){
+                throw new ApiException
+                        (HttpStatus.BAD_REQUEST.name(), "Part with id:" + oDetail.getPartCode() + " not found", HttpStatus.BAD_REQUEST.value());
+            }
+            if (part.getStock().getQuantity() - oDetail.getQuantity() < 0){
+                throw new ApiException
+                        (HttpStatus.BAD_REQUEST.name(), "Insuficient stock for part: " + part.getDescription() , HttpStatus.BAD_REQUEST.value());
+            }
+        }
+    }
+
+
+
+    public void updateStock(Part part, Integer newStock, CentralHouse centralHouse){
+        Integer currentStock = part.getStock().getQuantity();
+        part.getStock().setQuantity(currentStock - newStock);
+        StockCentralHouse stockCH = repoStockCentralHouse.findByPartIdEqualsAndCentralHouseIdEquals(part.getId(), centralHouse.getId());
+        stockCH.setQuantity(stockCH.getQuantity() + newStock);
+        repoStockCentralHouse.save(stockCH);
+        repoParts.save(part);
+    }
+
+
+
+
     private void validateCodes(String[] codes) {
         if (codes[0].length() != 4)
                 throw new ApiException
@@ -117,4 +266,7 @@ public class OrderServiceImpl implements OrdersService{
             throw new ApiException
                     (HttpStatus.UNPROCESSABLE_ENTITY.name(), "Order code must have 8 digits", HttpStatus.UNPROCESSABLE_ENTITY.value());
     }
+
+
+
 }

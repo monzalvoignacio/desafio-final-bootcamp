@@ -5,6 +5,7 @@ import com.mercadolibre.desafio_bootcamp.dto.OrderDto;
 import com.mercadolibre.desafio_bootcamp.dto.responses.OrderStatusDto;
 import com.mercadolibre.desafio_bootcamp.dto.responses.PartResponseDto;
 import com.mercadolibre.desafio_bootcamp.exceptions.ApiException;
+import com.mercadolibre.desafio_bootcamp.models.CentralHouse;
 import com.mercadolibre.desafio_bootcamp.models.Concessionarie;
 import com.mercadolibre.desafio_bootcamp.models.DeliveryStatus;
 import com.mercadolibre.desafio_bootcamp.models.Order;
@@ -13,10 +14,7 @@ import com.mercadolibre.desafio_bootcamp.services.OrderServiceImpl;
 import com.mercadolibre.desafio_bootcamp.services.PartsServiceImpl;
 import com.mercadolibre.desafio_bootcamp.unit.fixtures.OrderFixture;
 import com.mercadolibre.desafio_bootcamp.unit.fixtures.PartsFixture;
-import com.mercadolibre.desafio_bootcamp.util.MockitoExtension;
-import com.mercadolibre.desafio_bootcamp.util.OrderMapper;
-import com.mercadolibre.desafio_bootcamp.util.OrderStatusMapper;
-import com.mercadolibre.desafio_bootcamp.util.PartMapper;
+import com.mercadolibre.desafio_bootcamp.util.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,7 +37,13 @@ public class OrderServiceImplTest {
     private OrderStatusMapper orderStatusMapperMock;
     private ConcessioanrieRepository repoConcessionaryMock;
     private DeliveryStatusRepository repoDeliveryStatusMock;
-
+    private CentralHouseRepository repoCentralHouse;
+    private ShippingTypeRepository repoShippingType;
+    private PartRepository repoParts;
+    private OrderUtil orderUtil;
+    private OrderDetailRepository repoOrderDetail;
+    private StockCentralHouseRepository repoCentralHouseStock;
+    private AccountTypeRepository repoAccountType;
 
 
 
@@ -51,8 +55,16 @@ public class OrderServiceImplTest {
         orderStatusMapperMock = Mockito.mock(OrderStatusMapper.class);
         repoConcessionaryMock = Mockito.mock(ConcessioanrieRepository.class);
         repoDeliveryStatusMock = Mockito.mock(DeliveryStatusRepository.class);
+        repoCentralHouse = Mockito.mock(CentralHouseRepository.class);
+        repoShippingType = Mockito.mock(ShippingTypeRepository.class);
+        repoParts = Mockito.mock(PartRepository.class);
+        orderUtil = Mockito.mock(OrderUtil.class);
+        repoCentralHouseStock = Mockito.mock(StockCentralHouseRepository.class);
+        repoOrderDetail = Mockito.mock(OrderDetailRepository.class);
+        repoAccountType = Mockito.mock(AccountTypeRepository.class);
         service = new OrderServiceImpl(repoConcessionaryMock, repoDeliveryStatusMock,
-                orderRepositoryMock, orderMapperMock, orderStatusMapperMock);
+                orderRepositoryMock, orderMapperMock, orderStatusMapperMock, repoCentralHouse, repoShippingType, repoParts
+        , orderUtil, repoOrderDetail,repoCentralHouseStock, repoAccountType);
     }
 
     @Test
