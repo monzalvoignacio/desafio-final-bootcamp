@@ -21,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -41,6 +42,7 @@ public class PartsServiceImpl implements PartsService{
     }
 
     // receives controller input and returns the dto response object back to controller
+    @Transactional
     @Override
     public PartResponseDto getParts(String queryType, String date, String order) throws Exception {
         LocalDate dateLocal = null;
@@ -93,6 +95,7 @@ public class PartsServiceImpl implements PartsService{
         else return provider;
     }
 
+    @Transactional
     @Override
     public NewPartDto createPart(NewPartDto newPart) {
         String partCode = newPart.getPartCode();
