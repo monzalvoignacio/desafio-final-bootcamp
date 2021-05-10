@@ -20,4 +20,7 @@ public class CentralHouse {
     private String address;
     @OneToMany(mappedBy = "centralHouse")
     private List<Order> orders;
+    @OneToMany(mappedBy = "centralHouse")
+    private List<StockCentralHouse> centralHouseStocks;
+
 }
