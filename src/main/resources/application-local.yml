@@ -38,5 +38,5 @@ spring:
     show-sql: true
     hibernate:
       sql: debug
-      ddl-auto: create-drop
+      ddl-auto: update
     database-platform: org.hibernate.dialect.MySQL8Dialect
