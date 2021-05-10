@@ -20,8 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -42,7 +42,7 @@ public class PartsServiceImpl implements PartsService{
     }
 
     // receives controller input and returns the dto response object back to controller
-    @Transactional
+    @Transactional(readOnly=true)
     @Override
     public PartResponseDto getParts(String queryType, String date, String order) throws Exception {
         LocalDate dateLocal = null;

@@ -10,8 +10,8 @@ import com.mercadolibre.desafio_bootcamp.util.OrderMapper;
 import com.mercadolibre.desafio_bootcamp.util.OrderStatusMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.Comparator;
 import java.util.List;
 
@@ -54,7 +54,7 @@ public class OrderServiceImpl implements OrdersService{
         }
     }
 
-    @Transactional
+    @Transactional(readOnly=true)
     @Override
     public OrderResponseDto getOrders(Long dealerNumber, String deliveryStatusCode, Integer order) throws Exception {
         List<Order> orders = null;
@@ -95,7 +95,7 @@ public class OrderServiceImpl implements OrdersService{
     }
 
 //    Validar largo strings
-    @Transactional
+    @Transactional(readOnly=true)
     @Override
     public OrderStatusDto getOrderStatus(String code) {
         String[] res = code.split("-");
