@@ -321,7 +321,7 @@
             <dependency>
                 <groupId>com.fury</groupId>
                 <artifactId>furyutils</artifactId>
-                <version>0.0.1</version>
+                <version>0.0.2</version>
             </dependency>
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
@@ -347,6 +347,11 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>com.fury</groupId>
+            <artifactId>furyutils</artifactId>
+            <version>0.0.2</version>
+        </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
