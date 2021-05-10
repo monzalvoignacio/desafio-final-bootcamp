@@ -13,4 +13,4 @@ spring:
     hibernate:
       sql: debug
       ddl-auto: none
-    database-platform: org.hibernate.dialect.MySQL8Diale
+    database-platform: org.hibernate.dialect.MySQL8Dialect
