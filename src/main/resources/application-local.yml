@@ -31,11 +31,12 @@ spring:
     db: desafio
     username: ${LOCAL_DB_USER}
     password: ${LOCAL_DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
     initialization-mode: always
 
   jpa:
     show-sql: true
     hibernate:
       sql: debug
-      ddl-auto: none
+      ddl-auto: create-drop
     database-platform: org.hibernate.dialect.MySQL8Dialect

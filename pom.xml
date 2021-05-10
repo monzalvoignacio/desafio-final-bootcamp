@@ -456,7 +456,6 @@
         </dependency>
 
         <!-- Seguridad de SPRING BOOT-->
-        <!--
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
@@ -465,7 +464,6 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
         </dependency>
-        -->
         <!-- ___________________________________________________ -->
         <!-- _______________ Validación de Datos _______________ -->
         <!-- jackson propiedades JSON -->
