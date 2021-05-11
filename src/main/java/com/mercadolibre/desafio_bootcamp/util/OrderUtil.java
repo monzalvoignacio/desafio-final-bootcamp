@@ -31,7 +31,6 @@ public class OrderUtil {
         return order;
     }
 
-
     public List<OrderDetail> reverseMapOrderDetailDto(List<OrderDetailDto> orderDetailsDtos, Order newOrder){
         List<OrderDetail> response = new ArrayList<>();
         for(OrderDetailDto od : orderDetailsDtos){

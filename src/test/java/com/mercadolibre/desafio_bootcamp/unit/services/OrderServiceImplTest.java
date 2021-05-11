@@ -2,13 +2,12 @@ package com.mercadolibre.desafio_bootcamp.unit.services;
 
 
 import com.mercadolibre.desafio_bootcamp.dto.OrderDto;
+import com.mercadolibre.desafio_bootcamp.dto.responses.BasicResponseDto;
+import com.mercadolibre.desafio_bootcamp.dto.responses.GenerateOrderResponseDto;
 import com.mercadolibre.desafio_bootcamp.dto.responses.OrderStatusDto;
 import com.mercadolibre.desafio_bootcamp.dto.responses.PartResponseDto;
 import com.mercadolibre.desafio_bootcamp.exceptions.ApiException;
-import com.mercadolibre.desafio_bootcamp.models.CentralHouse;
-import com.mercadolibre.desafio_bootcamp.models.Concessionarie;
-import com.mercadolibre.desafio_bootcamp.models.DeliveryStatus;
-import com.mercadolibre.desafio_bootcamp.models.Order;
+import com.mercadolibre.desafio_bootcamp.models.*;
 import com.mercadolibre.desafio_bootcamp.repositories.*;
 import com.mercadolibre.desafio_bootcamp.services.OrderServiceImpl;
 import com.mercadolibre.desafio_bootcamp.services.PartsServiceImpl;
@@ -19,7 +18,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.http.HttpStatus;
 
 import javax.swing.text.html.Option;
 import java.util.ArrayList;
@@ -197,16 +198,134 @@ public class OrderServiceImplTest {
         assertEquals("No such delivery status found", e.getMessage());
     }
 
-    /*
-    CustomException thrown = assertThrows(
-                CustomException.class,
-                () -> flightService.getSpecificFlight(search) ,
-                "Expected doThing() to throw, but it didn't"
-        );
+    @Test
+    @DisplayName("Update order status 1/N")
+    void updateOrderStatus1() {
+        Exception e = assertThrows(ApiException.class,
+                () -> service.updateOrderStatus(2, "string"));
+        assertEquals("Order not found", e.getMessage());
+    }
 
-        assertTrue(thrown.getTitle().contains("Destination Error"));
+    @Test
+    @DisplayName("Update order status 2/N")
+    void updateOrderStatus2() {
+        Mockito.when(orderRepositoryMock.findByOrderNumberCMEquals(Mockito.any()))
+                .thenReturn(Optional.of(new Order()));
+        Exception e = assertThrows(ApiException.class,
+                () -> service.updateOrderStatus(2, "string"));
+        assertEquals("Delivery Status not found", e.getMessage());
+    }
 
-     */
+    @Test
+    @DisplayName("Update order status 3/N")
+    void updateOrderStatus3() {
+        Mockito.when(orderRepositoryMock.findByOrderNumberCMEquals(Mockito.any()))
+                .thenReturn(Optional.of(OrderFixture.defaultOrder1()));
+        Mockito.when(repoDeliveryStatusMock.findByCodeEquals(Mockito.any()))
+                .thenReturn(OrderFixture.defaultDeliveryStatusList());
+        Mockito.when(repoCentralHouseStock.findByPartIdEqualsAndCentralHouseIdEquals(Mockito.any(), Mockito.any()))
+                .thenReturn(OrderFixture.defaulStockCentralHouse());
+        BasicResponseDto expected = new BasicResponseDto(HttpStatus.OK, "Order status updated");
+        BasicResponseDto actual = service.updateOrderStatus(2, "string");
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("Generate order")
+    void generateOrder() {
+        Mockito.when(repoCentralHouse.findById(Mockito.any()))
+                .thenReturn(Optional.of(new CentralHouse()));
+        Mockito.when(repoShippingType.findByNameEquals(Mockito.any()))
+                .thenReturn(Optional.of(new ShippingType()));
+        Mockito.when(repoConcessionaryMock.findById(Mockito.any()))
+                .thenReturn(Optional.of(new Concessionarie()));
+        Mockito.when(repoDeliveryStatusMock.findByCodeEquals(Mockito.any()))
+                .thenReturn(OrderFixture.defaultDeliveryStatusList());
+        Mockito.when(orderRepositoryMock.findAll())
+                .thenReturn(OrderFixture.defaultOrderList());
+        Mockito.when(orderUtil.generateOrder(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any()))
+                .thenReturn(OrderFixture.defaultOrder1());
+        Mockito.when(repoParts.findPartByPartCode(Mockito.any())).thenReturn(Optional.of(PartsFixture.defaultPart1()));
+        GenerateOrderResponseDto actual = service.generateOrder(OrderFixture.defaultOrderRequestDto());
+        GenerateOrderResponseDto expected = new GenerateOrderResponseDto(OrderFixture.defaultOrder1().getOrderNumberCM().toString(), OrderFixture.defaultOrder1().getCentralHouse().getId());
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("Validate status exception 1/3")
+    void validateStatus1() {
+        Exception e = assertThrows(ApiException.class,
+                () -> service.validateOrderStatus(OrderFixture.defaultDeliveryStatusC(),
+                        OrderFixture.defaultOrderStatusC()));
+        assertEquals("Order is already in that state", e.getMessage());
+    }
+
+    @Test
+    @DisplayName("Validate status exception 2/3")
+    void validateStatus2() {
+        Exception e = assertThrows(ApiException.class,
+                () -> service.validateOrderStatus(OrderFixture.defaultDeliveryStatusF(),
+                        OrderFixture.defaultOrderStatusC()));
+        assertEquals("Order canceled, you can't update the status", e.getMessage());
+    }
+
+    @Test
+    @DisplayName("Validate status exception 3/3")
+    void validateStatus3() {
+        Exception e = assertThrows(ApiException.class,
+                () -> service.validateOrderStatus(OrderFixture.defaultDeliveryStatusC(),
+                        OrderFixture.defaultOrderStatusF()));
+        assertEquals("Order finished, you can't update the status", e.getMessage());
+    }
+
+    @Test
+    @DisplayName("Validate request 1/3")
+    void validateRequest11() {
+        Exception e = assertThrows(ApiException.class,
+                () -> service.validateRequest(OrderFixture.defaultOrderRequestDto()));
+        assertEquals("Central house not found", e.getMessage());
+    }
+
+    @Test
+    @DisplayName("Validate request 2/3")
+    void validateRequest2() {
+        Mockito.when(repoCentralHouse.findById(Mockito.any())).thenReturn(Optional.of(new CentralHouse()));
+        Exception e = assertThrows(ApiException.class,
+                () -> service.validateRequest(OrderFixture.defaultOrderRequestDto()));
+        assertEquals("Concessionary not found", e.getMessage());
+    }
+
+    @Test
+    @DisplayName("Validate request 3/3")
+    void validateRequest3() {
+        Mockito.when(repoCentralHouse.findById(Mockito.any())).thenReturn(Optional.of(new CentralHouse()));
+        Mockito.when(repoConcessionaryMock.findById(Mockito.any())).thenReturn(Optional.of(new Concessionarie()));
+        Mockito.when(repoShippingType.findById(Mockito.any())).thenReturn(null);
+        Exception e = assertThrows(ApiException.class,
+                () -> service.validateRequest(OrderFixture.defaultOrderRequestDto()));
+        assertEquals("Shipping Type not found", e.getMessage());
+    }
+
+    @Test
+    @DisplayName("Validate request parts 1/2")
+    void validateRequestParts1() {
+        Part part = PartsFixture.defaultPart1();
+        Mockito.when(repoParts.findPartByPartCode(Mockito.any())).thenReturn(Optional.of(part));
+        Exception e = assertThrows(ApiException.class,
+                () -> service.validateRequestParts(OrderFixture.defaultOrderDetailDtoList2()));
+        assertEquals("Insuficient stock for part: " + part.getDescription(), e.getMessage());
+    }
+
+    @Test
+    @DisplayName("Validate request parts 2/2")
+    void validateRequestParts2() {
+        Part part = PartsFixture.defaultPart1();
+        Exception e = assertThrows(ApiException.class,
+                () -> service.validateRequestParts(OrderFixture.defaultOrderDetailDtoList()));
+        assertEquals("Part with id:"+part.getPartCode()+" not found", e.getMessage());
+    }
+
+
 
 
 

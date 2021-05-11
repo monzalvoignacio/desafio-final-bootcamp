@@ -1,6 +1,8 @@
 package com.mercadolibre.desafio_bootcamp.unit.util;
 
 import com.mercadolibre.desafio_bootcamp.dto.PartDto;
+import com.mercadolibre.desafio_bootcamp.models.Part;
+import com.mercadolibre.desafio_bootcamp.unit.fixtures.OrderFixture;
 import com.mercadolibre.desafio_bootcamp.unit.fixtures.PartsFixture;
 import com.mercadolibre.desafio_bootcamp.util.MockitoExtension;
 import com.mercadolibre.desafio_bootcamp.util.PartMapper;
@@ -28,6 +30,16 @@ class PartMapperTest {
         PartDto expected = PartsFixture.defaultPartDto();
         PartDto actual = mapper.map(PartsFixture.defaultPart1(), false);
         assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("ReverseMap single object")
+    void reverseMapObject() throws Exception {
+        Part expected = PartsFixture.defaultPart5();
+        Part actual = mapper.reverseMap(PartsFixture.defaultNewPartDto2(), PartsFixture.defaultProvider());
+        assertEquals(expected.getDescription(), actual.getDescription());
+        assertEquals(expected.getPartCode(), actual.getPartCode());
+        assertEquals(expected.getLastModification(), actual.getLastModification());
     }
 
     @Test
