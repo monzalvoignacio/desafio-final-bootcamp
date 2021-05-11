@@ -133,6 +133,7 @@ public class OrderServiceImpl implements OrdersService{
     }
 
     @Override
+    @Transactional
     public GenerateOrderResponseDto generateOrder(OrderRequestDto request) {
         validateRequest(request);
         validateRequestParts(request.getParts());
@@ -164,6 +165,7 @@ public class OrderServiceImpl implements OrdersService{
     }
 
     @Override
+    @Transactional
     public BasicResponseDto updateOrderStatus(Integer orderNumberCM, String orderStatus) {
         Order order = repoOrders.findByOrderNumberCMEquals(orderNumberCM).orElse(null);
         if (order == null){
