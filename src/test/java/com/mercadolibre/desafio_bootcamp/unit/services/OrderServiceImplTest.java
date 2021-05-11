@@ -322,7 +322,7 @@ public class OrderServiceImplTest {
         Part part = PartsFixture.defaultPart1();
         Exception e = assertThrows(ApiException.class,
                 () -> service.validateRequestParts(OrderFixture.defaultOrderDetailDtoList()));
-        assertEquals("Part with id:"+part.getPartCode()+" not found", e.getMessage());
+        assertEquals("Part with partCode:"+part.getPartCode()+" not found", e.getMessage());
     }
 
 

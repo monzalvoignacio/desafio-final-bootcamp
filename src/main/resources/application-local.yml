@@ -5,7 +5,7 @@
 #spring:
 #  datasource:
 #    #initialization-mode: always
-#    #data: classpath:/data.sql
+#    #data: classpath:/datos.sql
 #    driver-class-name: com.mysql.cj.jdbc.Driver
 #    #    url: jdbc:mysql://proxysql.master.meliseginf.com:6612/[NombreDBMELI]?useSSL=true&serverTimezone=UTC&characterEncoding=UTF-8
 #    #    username: ${LOCAL_DB_USER}
