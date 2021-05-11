@@ -87,7 +87,7 @@ public class PartsServiceImpl implements PartsService{
         return newStock;
     }
 
-    private Provider validateProvider(Long providerId){
+    public Provider validateProvider(Long providerId){
         Provider provider = repoProvider.findProviderById(providerId).orElse(null);
         if (provider == null){
             throw new ApiException(HttpStatus.BAD_REQUEST.name(), "No such provider exists", HttpStatus.BAD_REQUEST.value());
@@ -100,10 +100,12 @@ public class PartsServiceImpl implements PartsService{
     public NewPartDto createPart(NewPartDto newPart) {
         String partCode = newPart.getPartCode();
         Part part = repoParts.findPartByPartCode(partCode).orElse(null);
+        // updates an existing part
         if (part != null){
-            Integer newStock = Integer.valueOf(newPart.getStock());
+            Integer newStock = newPart.getStock();
             updateStock(part, newStock);
         }
+        // creates and saves the new part
         else{
             Long providerId = newPart.getProviderId();
             Provider provider =  validateProvider(providerId);

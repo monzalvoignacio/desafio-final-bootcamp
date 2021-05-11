@@ -1,10 +1,12 @@
 package com.mercadolibre.desafio_bootcamp.unit.services;
 
+import com.mercadolibre.desafio_bootcamp.dto.NewPartDto;
 import com.mercadolibre.desafio_bootcamp.dto.PartDto;
 import com.mercadolibre.desafio_bootcamp.dto.responses.PartResponseDto;
 import com.mercadolibre.desafio_bootcamp.exceptions.ApiException;
 import com.mercadolibre.desafio_bootcamp.models.Part;
 import com.mercadolibre.desafio_bootcamp.models.PartRecord;
+import com.mercadolibre.desafio_bootcamp.models.Provider;
 import com.mercadolibre.desafio_bootcamp.repositories.PartRecordRepository;
 import com.mercadolibre.desafio_bootcamp.repositories.PartRepository;
 import com.mercadolibre.desafio_bootcamp.repositories.ProviderRepository;
@@ -16,11 +18,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
@@ -37,6 +41,7 @@ class PartsServiceImplTest {
         partRepositoryMock = Mockito.mock(PartRepository.class);
         partRecordRepositoryMock = Mockito.mock(PartRecordRepository.class);
         mapperMock = Mockito.mock(PartMapper.class);
+        providerRepositoryMock = Mockito.mock(ProviderRepository.class);
         service = new PartsServiceImpl(partRepositoryMock, partRecordRepositoryMock,
                 mapperMock, providerRepositoryMock);
     }
@@ -227,5 +232,82 @@ class PartsServiceImplTest {
         service.orderPartsRecords(3, actual);
         assertEquals(expected, actual);
     }
+
+    @Test
+    @DisplayName("Validate provider")
+    void validateProvider() {
+        Mockito.when(providerRepositoryMock.findProviderById(Mockito.any()))
+                .thenReturn(Optional.of(PartsFixture.defaultProvider()));
+        Provider expected = PartsFixture.defaultProvider();
+        Provider actual = service.validateProvider(2L);
+        assertEquals(expected, actual);
+    }
+
+    // NOT WORKING...
+    /*
+
+    @Test
+    @DisplayName("Invalid provider")
+    void validateNullProvider() {
+        Mockito.when(providerRepositoryMock.findProviderById(Mockito.any()))
+                .thenReturn(null);
+        Exception e = assertThrows(ApiException.class,
+                () -> service.validateProvider(2L));
+        assertEquals("No such provider exists", e.getMessage());
+    }
+     */
+
+
+    @Test
+    @DisplayName("Update stock")
+    void updateStock() {
+        Mockito.when(partRepositoryMock.findPartByPartCode(Mockito.any()))
+                .thenReturn(Optional.of(PartsFixture.defaultPart1()));
+        Part expectedPart = PartsFixture.defaultPart1();
+        expectedPart.getStock().setQuantity(expectedPart.getStock().getQuantity()+6);
+        Integer actual = service.updateStock("", 6);
+        assertEquals(expectedPart.getStock().getQuantity(), actual);
+    }
+
+    @Test
+    @DisplayName("Stock cannot be negative")
+    void invalidStock() {
+        Exception e = assertThrows(ApiException.class,
+                () -> service.updateStock("", -4));
+        assertEquals("Negative quantity", e.getMessage());
+    }
+
+    // NOT WORKING...
+    /*
+    @Test
+    @DisplayName("Create new part")
+    void createNewPart() throws Exception {
+        Mockito.when(partRepositoryMock.findPartByPartCode(Mockito.any()))
+                .thenReturn(Optional.of(PartsFixture.defaultPartNull()));
+        Mockito.when(providerRepositoryMock.findProviderById(Mockito.any()))
+                .thenReturn(Optional.of(PartsFixture.defaultProvider()));
+        Mockito.when((mapperMock.reverseMap(Mockito.any(), Mockito.any()))).thenReturn(PartsFixture.defaultPart1());
+        NewPartDto expected = PartsFixture.defaultNewPartDto();
+        NewPartDto actual = service.createPart(PartsFixture.defaultNewPartDto());
+        assertEquals(expected, actual);
+    }
+     */
+
+    @Test
+    @DisplayName("Update existing part")
+    void updateNewPart() throws Exception {
+        Mockito.when(partRepositoryMock.findPartByPartCode(Mockito.any()))
+                .thenReturn(Optional.of(PartsFixture.defaultPart1()));
+        NewPartDto expected = PartsFixture.defaultNewPartDto();
+        NewPartDto actual = service.createPart(PartsFixture.defaultNewPartDto());
+        assertEquals(expected, actual);
+    }
+
+
+
+
+
+
+
 
 }

@@ -1,12 +1,15 @@
 package com.mercadolibre.desafio_bootcamp.models;
 
 import lombok.Data;
+import lombok.ToString;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Data
+@ToString(exclude={"stock", "partRecords", "provider"})
 @Table(name = "parts")
 public class Part {
     @Id
