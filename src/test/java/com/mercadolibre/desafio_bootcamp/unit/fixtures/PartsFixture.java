@@ -381,6 +381,24 @@ public class PartsFixture {
         part.setDescription("This is a default part");
         part.setProvider(defaultProvider());
         Stock stock = new Stock();
+        stock.setPart(defaultPart6());
+        stock.setQuantity(15);
+        part.setStock(null);
+        part.setNetWeight(800);
+        part.setLongDimension(180);
+        part.setWidthDimenion(120);
+        part.setTalDimension(150);
+        part.setLastModification(LocalDate.of(2021, 05, 11));
+        part.setPartRecords(null);
+        return part;
+    }
+    // create default parts, one by one...
+    public static Part defaultPart6() {
+        Part part = new Part();
+        part.setPartCode("82917292");
+        part.setDescription("This is a default part");
+        part.setProvider(defaultProvider());
+        Stock stock = new Stock();
         stock.setQuantity(15);
         part.setStock(stock);
         part.setNetWeight(800);

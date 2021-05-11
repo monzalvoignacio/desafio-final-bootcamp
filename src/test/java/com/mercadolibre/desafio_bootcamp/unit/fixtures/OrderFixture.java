@@ -272,6 +272,76 @@ public class OrderFixture {
         return order;
     }
 
+    public static DeliveryStatus defaultDeliveryStatus() {
+        DeliveryStatus ds = new DeliveryStatus();
+        ds.setCode("P");
+        return ds;
+    }
+
+    public static List<OrderDetail> defaultOrderDetail() {
+        List<OrderDetail> orderDetails = new ArrayList();
+        OrderDetail detail = defaultOrderDetail1();
+        orderDetails.add(detail);
+        return orderDetails;
+    }
+
+    public static CentralHouse defaultCentralHouse() {
+        CentralHouse centralHouse = new CentralHouse();
+        centralHouse.setId(1L);
+        centralHouse.setCountry("Argentina");
+        centralHouse.setPhone(1231232);
+        centralHouse.setName("vofi");
+        centralHouse.setAddress("Ambrosio Olmos 878");
+        return centralHouse;
+    }
+
+    public static Concessionarie defaultConcessionarie() {
+        Concessionarie conce = new Concessionarie();
+        conce.setId(1L);
+        conce.setAddress("25 de mayo 425");
+        conce.setName("vofi2");
+        conce.setPhone(12312123);
+        conce.setCountry("Argentina");
+        return conce;
+    }
+
+    public static ShippingType defaultShippingType() {
+        ShippingType st = new ShippingType();
+        st.setId(1L);
+        st.setName("prueba");
+        st.setDescription("desc prueba");
+        return st;
+    }
+
+    public static Order defaultOrder() {
+        Order order = new Order();
+        order.setOrderNumberCM(3);
+        order.setOrderDate(LocalDate.of(2021, 05,11));
+        DeliveryStatus ds = new DeliveryStatus();
+        ds.setCode("P");
+        order.setDeliveryStatus(ds);
+        CentralHouse centralHouse = new CentralHouse();
+        centralHouse.setId(1L);
+        centralHouse.setCountry("Argentina");
+        centralHouse.setPhone(1231232);
+        centralHouse.setName("vofi");
+        centralHouse.setAddress("Ambrosio Olmos 878");
+        order.setCentralHouse(centralHouse);
+        Concessionarie conce = new Concessionarie();
+        conce.setId(1L);
+        conce.setAddress("25 de mayo 425");
+        conce.setName("vofi2");
+        conce.setPhone(12312123);
+        conce.setCountry("Argentina");
+        order.setConcessionarie(conce);
+        ShippingType st = new ShippingType();
+        st.setId(1L);
+        st.setName("prueba");
+        st.setDescription("desc prueba");
+        order.setShippingType(st);
+        return order;
+    }
+
     public static Order defaultOrder1() {
         Order order = new Order();
         order.setId(1L);
