@@ -1,5 +1,6 @@
 package com.mercadolibre.desafio_bootcamp.unit.fixtures;
 
+import com.mercadolibre.desafio_bootcamp.dto.NewPartDto;
 import com.mercadolibre.desafio_bootcamp.dto.PartDto;
 import com.mercadolibre.desafio_bootcamp.dto.responses.PartResponseDto;
 import com.mercadolibre.desafio_bootcamp.models.*;
@@ -11,6 +12,55 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class PartsFixture {
+
+    // creates new part dto object
+    public static NewPartDto defaultNewPartDto2() throws Exception {
+        NewPartDto newPartDto = new NewPartDto();
+        newPartDto.setPartCode("82917292");
+        newPartDto.setDescription("This is a default part");
+        newPartDto.setNetWeight(800);
+        newPartDto.setNormalPrice(1000.00);
+        newPartDto.setStock(15);
+        newPartDto.setLongDimension(180);
+        newPartDto.setTalDimension(150);
+        newPartDto.setUrgentPrice(1500.00);
+        newPartDto.setLastModification("2015-07-12");
+        newPartDto.setProviderId(1L);
+        newPartDto.setDiscountTypeId(2L);
+        newPartDto.setWidthDimension(120);
+        return newPartDto;
+    }
+
+    // creates new part dto object
+    public static NewPartDto defaultNewPartDto() throws Exception {
+        NewPartDto newPartDto = new NewPartDto();
+        newPartDto.setPartCode("0001");
+        newPartDto.setDescription("PruebaNewPartDto");
+        newPartDto.setNetWeight(12);
+        newPartDto.setNormalPrice(1000.00);
+        newPartDto.setStock(15);
+        newPartDto.setLongDimension(11);
+        newPartDto.setTalDimension(10);
+        newPartDto.setUrgentPrice(1500.00);
+        newPartDto.setLastModification("2020-05-15");
+        newPartDto.setProviderId(1L);
+        newPartDto.setDiscountTypeId(2L);
+        newPartDto.setWidthDimension(12);
+        return newPartDto;
+    }
+
+    // create a default provider
+    public static Provider defaultProvider(){
+        Provider prov = new Provider();
+        prov.setId(1L);
+        prov.setCountry("Argentina");
+        prov.setPhone("1332244");
+        prov.setName("PruebaProv");
+        prov.setAddress("25 de Mayo 525");
+        prov.setParts(defaultListPartModel());
+
+        return prov;
+    }
 
     // create a response dto
     public static PartResponseDto defaultPartResponseDto() {
@@ -233,6 +283,18 @@ public class PartsFixture {
         record.setLastModification(LocalDate.of(2002, 01, 17));
         return record;
     }
+    public static PartRecord defaultPartRecord5() {
+        PartRecord record = new PartRecord();
+        record.setId(1L);
+        record.setPart(defaultPart5());
+        DiscountType discount = new DiscountType();
+        discount.setDescription("A91");
+        record.setDiscountType(discount);
+        record.setNormalPrice(1500.0);
+        record.setUrgentPrice(1980.0);
+        record.setLastModification(LocalDate.of(2019, 03, 12));
+        return record;
+    }
 
     // create default parts, one by one...
     public static Part defaultPart1() {
@@ -309,6 +371,42 @@ public class PartsFixture {
         part.setTalDimension(100);
         part.setLastModification(LocalDate.of(1999, 11, 17));
         part.setPartRecords(Arrays.asList(defaultPartRecord4()));
+        return part;
+    }
+
+    // create default parts, one by one...
+    public static Part defaultPart5() {
+        Part part = new Part();
+        part.setPartCode("82917292");
+        part.setDescription("This is a default part");
+        part.setProvider(defaultProvider());
+        Stock stock = new Stock();
+        stock.setPart(defaultPart6());
+        stock.setQuantity(15);
+        part.setStock(null);
+        part.setNetWeight(800);
+        part.setLongDimension(180);
+        part.setWidthDimenion(120);
+        part.setTalDimension(150);
+        part.setLastModification(LocalDate.of(2021, 05, 11));
+        part.setPartRecords(null);
+        return part;
+    }
+    // create default parts, one by one...
+    public static Part defaultPart6() {
+        Part part = new Part();
+        part.setPartCode("82917292");
+        part.setDescription("This is a default part");
+        part.setProvider(defaultProvider());
+        Stock stock = new Stock();
+        stock.setQuantity(15);
+        part.setStock(stock);
+        part.setNetWeight(800);
+        part.setLongDimension(180);
+        part.setWidthDimenion(120);
+        part.setTalDimension(150);
+        part.setLastModification(LocalDate.of(2021, 05, 11));
+        part.setPartRecords(Arrays.asList(defaultPartRecord1()));
         return part;
     }
 }
