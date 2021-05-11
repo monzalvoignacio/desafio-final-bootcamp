@@ -339,6 +339,8 @@ public class OrderFixture {
         st.setName("prueba");
         st.setDescription("desc prueba");
         order.setShippingType(st);
+        order.setDaysDelayed(0);
+        order.setDeliveryDate(LocalDate.of(2021, 05, 18));
         return order;
     }
 
