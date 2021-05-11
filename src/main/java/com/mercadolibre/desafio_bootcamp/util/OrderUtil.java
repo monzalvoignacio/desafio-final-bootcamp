@@ -28,6 +28,8 @@ public class OrderUtil {
         order.setShippingType(shippingType);
         order.setDeliveryStatus(deliveryStatus);
         order.setOrderNumberCM(orderNumberCM);
+        order.setDaysDelayed(0);
+        order.setDeliveryDate(LocalDate.now().plusDays(7));
         return order;
     }
 
