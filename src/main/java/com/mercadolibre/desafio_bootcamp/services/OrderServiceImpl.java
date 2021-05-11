@@ -234,7 +234,7 @@ public class OrderServiceImpl implements OrdersService{
             Part part = repoParts.findPartByPartCode(oDetail.getPartCode()).orElse(null);
             if(part == null){
                 throw new ApiException
-                        (HttpStatus.BAD_REQUEST.name(), "Part with id:" + oDetail.getPartCode() + " not found", HttpStatus.BAD_REQUEST.value());
+                        (HttpStatus.BAD_REQUEST.name(), "Part with partCode:" + oDetail.getPartCode() + " not found", HttpStatus.BAD_REQUEST.value());
             }
             if (part.getStock().getQuantity() - oDetail.getQuantity() < 0){
                 throw new ApiException
