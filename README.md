@@ -1,4 +1,3 @@
-﻿**Aguante fury vieja**
 
 ## Parts controller
 **POST - Create new part**
