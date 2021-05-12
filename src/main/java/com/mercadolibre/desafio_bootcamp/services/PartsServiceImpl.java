@@ -6,12 +6,8 @@ import com.mercadolibre.desafio_bootcamp.dto.NewPartDto;
 import com.mercadolibre.desafio_bootcamp.dto.PartDto;
 import com.mercadolibre.desafio_bootcamp.dto.responses.PartResponseDto;
 import com.mercadolibre.desafio_bootcamp.exceptions.ApiException;
-import com.mercadolibre.desafio_bootcamp.models.Part;
-import com.mercadolibre.desafio_bootcamp.models.PartRecord;
-import com.mercadolibre.desafio_bootcamp.models.Provider;
-import com.mercadolibre.desafio_bootcamp.repositories.PartRecordRepository;
-import com.mercadolibre.desafio_bootcamp.repositories.PartRepository;
-import com.mercadolibre.desafio_bootcamp.repositories.ProviderRepository;
+import com.mercadolibre.desafio_bootcamp.models.*;
+import com.mercadolibre.desafio_bootcamp.repositories.*;
 import com.mercadolibre.desafio_bootcamp.util.DateMapper;
 import com.mercadolibre.desafio_bootcamp.util.PartMapper;
 import org.aspectj.apache.bcel.classfile.Module;
@@ -32,13 +28,19 @@ public class PartsServiceImpl implements PartsService{
     private PartRecordRepository repoPartRecords;
     private PartMapper mapper;
     private ProviderRepository repoProvider;
+    private StockCentralHouseRepository stockCentralHouseRepository;
+    private CentralHouseRepository centralHouseRepository;
 
     public PartsServiceImpl(PartRepository repoParts, PartRecordRepository repoPartRecords,
-                            PartMapper mapper, ProviderRepository repoProvider){
+                            PartMapper mapper, ProviderRepository repoProvider,
+                            StockCentralHouseRepository stockCentralHouseRepo,
+                            CentralHouseRepository centralHouseRepository){
         this.repoParts = repoParts;
         this.repoPartRecords = repoPartRecords;
         this.mapper = mapper;
         this.repoProvider = repoProvider;
+        this.stockCentralHouseRepository = stockCentralHouseRepo;
+        this.centralHouseRepository = centralHouseRepository;
     }
 
     // receives controller input and returns the dto response object back to controller
@@ -95,6 +97,17 @@ public class PartsServiceImpl implements PartsService{
         else return provider;
     }
 
+    public void updateCentralHouseStock(Part newPart){
+        List<CentralHouse> centralHouses = centralHouseRepository.findAll();
+        for (CentralHouse ch : centralHouses){
+            StockCentralHouse stockCentralHouse = new StockCentralHouse();
+            stockCentralHouse.setCentralHouse(ch);
+            stockCentralHouse.setPart(newPart);
+            stockCentralHouse.setQuantity(0);
+            stockCentralHouseRepository.save(stockCentralHouse);
+        }
+    }
+
     @Transactional
     @Override
     public NewPartDto createPart(NewPartDto newPart) {
@@ -111,6 +124,7 @@ public class PartsServiceImpl implements PartsService{
             Provider provider =  validateProvider(providerId);
             part = mapper.reverseMap(newPart, provider);
             repoParts.save(part);
+            updateCentralHouseStock(part);
         }
         return newPart;
     }

@@ -7,9 +7,7 @@ import com.mercadolibre.desafio_bootcamp.exceptions.ApiException;
 import com.mercadolibre.desafio_bootcamp.models.Part;
 import com.mercadolibre.desafio_bootcamp.models.PartRecord;
 import com.mercadolibre.desafio_bootcamp.models.Provider;
-import com.mercadolibre.desafio_bootcamp.repositories.PartRecordRepository;
-import com.mercadolibre.desafio_bootcamp.repositories.PartRepository;
-import com.mercadolibre.desafio_bootcamp.repositories.ProviderRepository;
+import com.mercadolibre.desafio_bootcamp.repositories.*;
 import com.mercadolibre.desafio_bootcamp.services.PartsServiceImpl;
 import com.mercadolibre.desafio_bootcamp.unit.fixtures.PartsFixture;
 import com.mercadolibre.desafio_bootcamp.util.MockitoExtension;
@@ -35,6 +33,8 @@ class PartsServiceImplTest {
     private PartRecordRepository partRecordRepositoryMock;
     private ProviderRepository providerRepositoryMock;
     private PartMapper mapperMock;
+    private StockCentralHouseRepository stockCentralHouseRepositoryMock;
+    private CentralHouseRepository centralHouseRepositoryMock;
 
     @BeforeEach
     void setUp() {
@@ -42,8 +42,11 @@ class PartsServiceImplTest {
         partRecordRepositoryMock = Mockito.mock(PartRecordRepository.class);
         mapperMock = Mockito.mock(PartMapper.class);
         providerRepositoryMock = Mockito.mock(ProviderRepository.class);
+        stockCentralHouseRepositoryMock = Mockito.mock(StockCentralHouseRepository.class);
+        centralHouseRepositoryMock = Mockito.mock(CentralHouseRepository.class);
+
         service = new PartsServiceImpl(partRepositoryMock, partRecordRepositoryMock,
-                mapperMock, providerRepositoryMock);
+                mapperMock, providerRepositoryMock, stockCentralHouseRepositoryMock, centralHouseRepositoryMock);
     }
 
     @Test

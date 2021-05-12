@@ -61,7 +61,7 @@ public class PartMapper {
         dto.setDescription(part.getDescription());
 
         PartRecord partRecord = part.getPartRecords().get(part.getPartRecords().size() -1 );
-        dto.setDiscountType(partRecord.getDiscountType().getDescription());
+        dto.setDiscountType(partRecord.getDiscountType() != null ? partRecord.getDiscountType().getDescription() : "N/A");
         dto.setUrgentPrice(partRecord.getUrgentPrice().toString());
 
         dto.setNormalPrice(partRecord.getNormalPrice().toString());
