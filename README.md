@@ -1,68 +1,81 @@
-# desafio-bootcamp
+﻿**Aguante fury vieja**
 
-# Spring Boot App model for Java 11
-
-We provide a basic model for JDK 11 / Spring based web applications.
-
-Please address any questions and comments to [Fury Issue Tracker](https://github.com/mercadolibre/fury/issues).
-
-## Usage
-
-### SCOPE
-
-The suffix of each Fury **SCOPE** is used to know which properties file to use, it is identified from the last '-' of the name of the scope.
-
-If you want to run the application from your development IDE, you need to configure the environment variable **SCOPE=local** in the app luncher.
-
-The properties of **application.yml** are always loaded and at the same time they are complemented with **application-<SCOPE_SUFFIX>.yml** properties. If a property is in both files, the one that is configured in **application-<SCOPE_SUFFIX>.yml** has preference over the property of **application.yml**.
-
-For example, for the **SCOPE** 'items-loader-test' the **SCOPE_SUFFIX** would be 'test' and the loaded property files will be **application.yml** and **application-test.yml**
-
-### Web Server
-
-Each Spring Boot web application includes an embedded web server. For servlet stack applications, Its supports three web Servers:
-  * Tomcat (maven dependency: `spring-boot-starter-tomcat`)
-  * Jetty (maven dependency: `spring-boot-starter-jetty`)
-  * Undertow (maven dependency: `spring-boot-starter-undertow`)
-
-This project is configured with Jetty, but to exchange WebServer, it is enough to configure the dependencies mentioned above in the pom.xml file.
-
-### Main
-
-The main class for this app is Application, where Spring context is initialized and SCOPE_SUFFIX is generated.
-
-### Error Handling
-
-We also provide basic handling for exceptions in ControllerExceptionHandler class.
-
-## Api Documentation
-
-This project uses Springfox to automate the generation of machine and human readable specifications for JSON APIs written using Spring. Springfox works by examining an application, once, at runtime to infer API semantics based on spring configurations, class structure and various compile time java Annotations.
-
-You can change this configuration in SpringfoxConfig class.
-
-## [Release Process](https://release-process.furycloud.io/#/)
-
-### Usage
-
-1. Specify the correct tag for your app in your `Dockerfile` and `Dockerfile.runtime`, according to the desired Java runtime version.
-
+## Parts controller
+**POST - Create new part**
+	api/v1/parts/
 ```
-# Dockerfile
-FROM hub.furycloud.io/mercadolibre/java:1.11-mini
+{
+  "centralHouseId": 1,
+  "consessionarieId": 1,
+  "shippingType": "Mercado Envios",
+  "parts": [
+    {
+      "partCode": "00000002",
+      "description": "Paragolpes de Fiat 147",
+      "quantity": 2,
+      "accountType": "Repuestos",
+      "reason": "I hit a tree at 40mph. Car's good though"
+    }
+  ]
+}
 ```
+**PATCH - Update stock**
+	api/v1/parts?partCode=00000001&quantity=32
+	*Query string parameters:*
+ - partCode: string
+ - quantity: integer
+ 
+ **GET - Parts list**
+	/api/v1/parts/list?queryType=P&date=1996-01-21&order=1
+	*Query string parameters:*
+ - queryType: string
+ - date: YYYY-MM-DD (**not required**)
+ - order: integer (**not required**)
 
-You can find all available tags for your `Dockerfile` [here](https://github.com/mercadolibre/fury_java-mini#supported-tags)
+## Orders Controller
 
+**POST - Generate new order**
+	api/v1/parts/orders/
 ```
-# Dockerfile.runtime
-FROM hub.furycloud.io/mercadolibre/java:1.11-runtime-mini
+{
+  "description": "Estereo Ford Fiesta base",
+  "stock": 18,
+  "partCode": "00000004",
+  "providerId": 1,
+  "netWeight": 12,
+  "longDimension": 10,
+  "widthDimension": 9,
+  "talDimension": 4,
+  "lastModification": "2021-05-12",
+  "discountTypeId": 1,
+  "normalPrice": 16000,
+  "urgentPrice": 23000
+}
 ```
+  **GET - Fetch order**
+​/api​/v1​/parts​/orders​/{orderId}
+	*Query string parameters:*
+ - orderId: integer 
+*Note: orderId is composed by the dealer number(D), the central house number(C), and the order code(O). It must respect the following format: *
+DDDD-CCCC-OOOOOOOO
+*Should any number have less than four digits, it must be completed with zeros. E.G: 0001-0001-00000025*
 
-You can find all available tags for your `Dockerfile.runtime` [here](https://github.com/mercadolibre/fury_java-mini-runtime#supported-tags)
+**GET - List all orders**
+/api/v1/parts/orders/list?dealerNumber=1&deliveryStatus=D&order=0
+	*Query string parameters:*
+ - dealerNumber: integer
+ - deliveryStatus: string (**not required**)
+ - order: integer (**not required**)
 
-2. Start coding!
+**PATCH - Update order status**
+/api/v1/parts/orders/update_status?orderStatus=D&orderNumberCM=25
+	*Query string parameters:*
+ - orderStatus: string
+ - orderNumberCM: integer
 
-### Questions
 
-[Release Process Issue Tracker](https://github.com/mercadolibre/fury_release-process/issues)
+
+
+
+
+
