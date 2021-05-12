@@ -128,6 +128,9 @@ public class OrderServiceImpl implements OrdersService{
         Long numberCE = Long.parseLong(res[0]);
         Integer orderCode = Integer.parseInt(res[2]);
         List<Order> order = repoOrders.findOrderByConcessionarieIdEqualsAndCentralHouseIdEqualsAndOrderNumberCMEquals(dealerNumber, numberCE, orderCode);
+        if(order.isEmpty()){
+            throw new ApiException(HttpStatus.BAD_REQUEST.name(), "Orders not found", HttpStatus.BAD_REQUEST.value());
+        }
         OrderStatusDto orderDtos = orderStatusMapper.mapList(order.get(0));
         return orderDtos;
     }
