@@ -2,19 +2,19 @@
 # TABLE STRUCTURE FOR: shipping_types
 #
 
-INSERT INTO `shipping_types` (`id`, `description`, `name`) VALUES ('1', 'Laborum at soluta iusto. Occaecati sit voluptas quae enim recusandae harum. Magnam voluptates aut quo voluptatem exercitationem possimus.', 'quis');
-INSERT INTO `shipping_types` (`id`, `description`, `name`) VALUES ('2', 'Nostrum aut eum et quibusdam dolore nihil. Nesciunt esse incidunt consequatur dignissimos. Laudantium eum doloribus earum earum ipsa illum debitis. Ut architecto asperiores soluta deserunt distinctio. Est consequatur qui dicta dolor reprehenderit blanditi', 'quisquam');
-INSERT INTO `shipping_types` (`id`, `description`, `name`) VALUES ('3', 'Deserunt ut debitis aut error non. Nisi nihil in quod quis architecto. Dolorem dolores nobis occaecati deleniti enim. Placeat enim dolores corrupti et et cupiditate qui.', 'voluptatem');
-INSERT INTO `shipping_types` (`id`, `description`, `name`) VALUES ('4', 'Corporis facilis dolorum deserunt assumenda aut minus et. Deserunt ut autem ut natus saepe quos. Velit doloribus sunt repudiandae quia maiores.', 'ipsam');
+INSERT INTO `shipping_types` (`id`, `description`, `name`) VALUES ('1', 'Envio directo', 'Directo');
+INSERT INTO `shipping_types` (`id`, `description`, `name`) VALUES ('2', 'Mercado envios', 'Mercado Envios');
+INSERT INTO `shipping_types` (`id`, `description`, `name`) VALUES ('3', 'Envio por correo', 'Oca');
+INSERT INTO `shipping_types` (`id`, `description`, `name`) VALUES ('4', 'Envio por courrier', 'DHL');
 
 #
 # TABLE STRUCTURE FOR: stock
 #
 
-INSERT INTO `stock` (`id`, `quantity`) VALUES ('0', 21368);
-INSERT INTO `stock` (`id`, `quantity`) VALUES ('1', 8822);
-INSERT INTO `stock` (`id`, `quantity`) VALUES ('2', 369563);
-INSERT INTO `stock` (`id`, `quantity`) VALUES ('3', 45112);
+INSERT INTO `stock` (`id`, `quantity`) VALUES ('0', 50);
+INSERT INTO `stock` (`id`, `quantity`) VALUES ('1', 182);
+INSERT INTO `stock` (`id`, `quantity`) VALUES ('2', 27);
+INSERT INTO `stock` (`id`, `quantity`) VALUES ('3', 42);
 
 #
 # TABLE STRUCTURE FOR: providers
@@ -35,13 +35,18 @@ INSERT INTO `providers` (`id`, `address`, `country`, `name`, `phone`) VALUES ('3
 
 INSERT INTO `parts` (`id`, `description`, `lastModification`, `longDimension`, `netWeight`, `partCode`, `talDimension`, `widthDimenion`, `provider_id`, `stock_id`) VALUES ('0', 'Puertas', '1995-08-10', 8, 6, '00000001', 3, 3, '0', '0');
 
+
+INSERT INTO `parts` (`id`, `description`, `lastModification`, `longDimension`, `netWeight`, `partCode`, `talDimension`, `widthDimenion`, `provider_id`, `stock_id`) VALUES ('1', 'Paragolpes de Fiat 147', '2000-08-10', 8, 6, '00000002', 3, 3, '0', '1');
+
+INSERT INTO `parts` (`id`, `description`, `lastModification`, `longDimension`, `netWeight`, `partCode`, `talDimension`, `widthDimenion`, `provider_id`, `stock_id`) VALUES ('2', 'Ruedas Pirelli Gt Grand Master', '2002-08-10', 8, 6, '00000003', 3, 3, '0', '2');
+
 #
 # TABLE STRUCTURE FOR: discount_types
 #
 
-INSERT INTO `discount_types` (`id`, `description`) VALUES ('1', 'Quia ut non odit ipsa aut est suscipit. Iste sint perferendis temporibus corrupti vel exercitationem. Debitis praesentium animi qui ut qui assumenda. Et provident dolor laudantium. Facere ex dicta ut voluptatem.');
-INSERT INTO `discount_types` (`id`, `description`) VALUES ('2', 'Laudantium veniam aliquam non eum eum. Qui nam animi consectetur illum nihil perferendis.');
-INSERT INTO `discount_types` (`id`, `description`) VALUES ('3', 'Omnis dignissimos odit deserunt omnis unde. Vel praesentium ipsa eos aspernatur voluptatibus eum aperiam. Officiis consequatur ipsa est ut placeat et modi. Aut provident odio totam accusantium impedit saepe voluptatem.');
+INSERT INTO `discount_types` (`id`, `description`) VALUES ('1', 'Descuento por socio ACA - 10%');
+INSERT INTO `discount_types` (`id`, `description`) VALUES ('2', 'Descuento por veterano de malvinas -  15%');
+INSERT INTO `discount_types` (`id`, `description`) VALUES ('3', 'Descuento socio YPF ServiClub - 95%');
 
 #
 # TABLE STRUCTURE FOR: part_records
@@ -50,6 +55,12 @@ INSERT INTO `discount_types` (`id`, `description`) VALUES ('3', 'Omnis dignissim
 
 
 INSERT INTO `part_records` (`id`, `lastModification`, `normalPrice`, `urgentPrice`, `discount_type_id`, `part_id`) VALUES ('0', '1992-01-28', '5000', '10000', '1', '0');
+
+INSERT INTO `part_records` (`id`, `lastModification`, `normalPrice`, `urgentPrice`, `discount_type_id`, `part_id`) VALUES ('1', '1992-01-28', '5000', '10000', '2', '1');
+
+INSERT INTO `part_records` (`id`, `lastModification`, `normalPrice`, `urgentPrice`, `discount_type_id`, `part_id`) VALUES ('2', '1992-01-28', '5000', '10000', '3', '2');
+
+
 
 #
 # TABLE STRUCTURE FOR: account_types
@@ -93,6 +104,11 @@ INSERT INTO `orders` (`id`, `daysDelayed`, `deliveryDate`, `orderDate`, `orderNu
 #
 
 
-INSERT INTO `order_details` (`id`, `description`, `quantity`, `reason`, `account_type_id`, `order_id`, `part_id`) VALUES ('0', 'pedido de puerts','1','who reason', '1', '0', '0');
+INSERT INTO `order_details` (`id`, `description`, `quantity`, `reason`, `account_type_id`, `order_id`, `part_id`) VALUES ('0', 'pedido de puertas','1','who reason', '1', '0', '0');
 
 INSERT INTO `stock_central_house` (`id`,`quantity`,`central_house_id`,`part_id`) VALUES ('1', '123', '0001', '0');
+
+#
+# TABLE STRUCTURE FOR: users
+#
+INSERT INTO `users` (`id`,`password`,`username`,`role`) VALUES ('1', '$2a$10$DXK9eG5/tHAwMiAVB.x5vOAE6EVnC2eYtvGo7UiZpHY/rHJcqtsqe', 'gabriel', 'ADMIN');
