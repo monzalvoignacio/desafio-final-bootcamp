@@ -388,7 +388,7 @@ public class PartsFixture {
         part.setLongDimension(180);
         part.setWidthDimenion(120);
         part.setTalDimension(150);
-        part.setLastModification(LocalDate.of(2021, 05, 11));
+        part.setLastModification(LocalDate.now());
         part.setPartRecords(null);
         return part;
     }
@@ -405,7 +405,7 @@ public class PartsFixture {
         part.setLongDimension(180);
         part.setWidthDimenion(120);
         part.setTalDimension(150);
-        part.setLastModification(LocalDate.of(2021, 05, 11));
+        part.setLastModification(LocalDate.now());
         part.setPartRecords(Arrays.asList(defaultPartRecord1()));
         return part;
     }

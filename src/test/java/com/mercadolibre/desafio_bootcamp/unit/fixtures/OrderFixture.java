@@ -316,7 +316,7 @@ public class OrderFixture {
     public static Order defaultOrder() {
         Order order = new Order();
         order.setOrderNumberCM(3);
-        order.setOrderDate(LocalDate.of(2021, 05,11));
+        order.setOrderDate(LocalDate.now());
         DeliveryStatus ds = new DeliveryStatus();
         ds.setCode("P");
         order.setDeliveryStatus(ds);
@@ -340,7 +340,7 @@ public class OrderFixture {
         st.setDescription("desc prueba");
         order.setShippingType(st);
         order.setDaysDelayed(0);
-        order.setDeliveryDate(LocalDate.of(2021, 05, 18));
+        order.setDeliveryDate(LocalDate.now().plusDays(7));
         return order;
     }
 
