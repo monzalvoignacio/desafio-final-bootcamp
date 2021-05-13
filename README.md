@@ -4,20 +4,21 @@
 	api/v1/parts/
 ```
 {
-  "centralHouseId": 1,
-  "consessionarieId": 1,
-  "shippingType": "Mercado Envios",
-  "parts": [
-    {
-      "partCode": "00000002",
-      "description": "Paragolpes de Fiat 147",
-      "quantity": 2,
-      "accountType": "Repuestos",
-      "reason": "I hit a tree at 40mph. Car's good though"
-    }
-  ]
+  "description": "Estereo Ford Fiesta base",
+  "stock": 18,
+  "partCode": "00000004",
+  "providerId": 1,
+  "netWeight": 12,
+  "longDimension": 10,
+  "widthDimension": 9,
+  "talDimension": 4,
+  "lastModification": "2021-05-12",
+  "discountTypeId": 1,
+  "normalPrice": 16000,
+  "urgentPrice": 23000
 }
 ```
+
 **PATCH - Update stock**
 	api/v1/parts?partCode=00000001&quantity=32
 	*Query string parameters:*
@@ -37,18 +38,18 @@
 	api/v1/parts/orders/
 ```
 {
-  "description": "Estereo Ford Fiesta base",
-  "stock": 18,
-  "partCode": "00000004",
-  "providerId": 1,
-  "netWeight": 12,
-  "longDimension": 10,
-  "widthDimension": 9,
-  "talDimension": 4,
-  "lastModification": "2021-05-12",
-  "discountTypeId": 1,
-  "normalPrice": 16000,
-  "urgentPrice": 23000
+  "centralHouseId": 1,
+  "consessionarieId": 1,
+  "shippingType": "Mercado Envios",
+  "parts": [
+    {
+      "partCode": "00000002",
+      "description": "Paragolpes de Fiat 147",
+      "quantity": 2,
+      "accountType": "Repuestos",
+      "reason": "I hit a tree at 40mph. Car's good though"
+    }
+  ]
 }
 ```
   **GET - Fetch order**
