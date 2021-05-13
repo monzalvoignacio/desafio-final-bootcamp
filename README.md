@@ -20,12 +20,14 @@
 ```
 
 **PATCH - Update stock**
+
 	api/v1/parts?partCode=00000001&quantity=32
 	*Query string parameters:*
  - partCode: string
  - quantity: integer
  
  **GET - Parts list**
+
 	/api/v1/parts/list?queryType=P&date=1996-01-21&order=1
 	*Query string parameters:*
  - queryType: string
@@ -35,6 +37,7 @@
 ## Orders Controller
 
 **POST - Generate new order**
+
 	api/v1/parts/orders/
 ```
 {
@@ -53,6 +56,7 @@
 }
 ```
   **GET - Fetch order**
+
 ​/api​/v1​/parts​/orders​/{orderId}
 	*Query string parameters:*
  - orderId: integer 
@@ -61,6 +65,7 @@ DDDD-CCCC-OOOOOOOO
 *Should any number have less than four digits, it must be completed with zeros. E.G: 0001-0001-00000025*
 
 **GET - List all orders**
+
 /api/v1/parts/orders/list?dealerNumber=1&deliveryStatus=D&order=0
 	*Query string parameters:*
  - dealerNumber: integer
@@ -68,10 +73,30 @@ DDDD-CCCC-OOOOOOOO
  - order: integer (**not required**)
 
 **PATCH - Update order status**
+
 /api/v1/parts/orders/update_status?orderStatus=D&orderNumberCM=25
 	*Query string parameters:*
  - orderStatus: string
  - orderNumberCM: integer
+
+
+
+## Users Controller
+
+**POST - Create new user - Requires admin role**
+
+api/v1/users/new/
+*x-www-form-encoded parameters:*
+- username: string
+- password: string
+
+**PATCH - Update user role - Requires admin role**
+
+_Switches between admin and regular roles_
+
+/api/v1/users/changeRole
+*Query string parameters:*
+- username: string
 
 
 

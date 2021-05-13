@@ -246,20 +246,13 @@ class PartsServiceImplTest {
         assertEquals(expected, actual);
     }
 
-    // NOT WORKING...
-    /*
-
     @Test
     @DisplayName("Invalid provider")
     void validateNullProvider() {
-        Mockito.when(providerRepositoryMock.findProviderById(Mockito.any()))
-                .thenReturn(null);
         Exception e = assertThrows(ApiException.class,
                 () -> service.validateProvider(2L));
         assertEquals("No such provider exists", e.getMessage());
     }
-     */
-
 
     @Test
     @DisplayName("Update stock")
@@ -280,13 +273,9 @@ class PartsServiceImplTest {
         assertEquals("Negative quantity", e.getMessage());
     }
 
-    // NOT WORKING...
-    /*
     @Test
     @DisplayName("Create new part")
     void createNewPart() throws Exception {
-        Mockito.when(partRepositoryMock.findPartByPartCode(Mockito.any()))
-                .thenReturn(Optional.of(PartsFixture.defaultPartNull()));
         Mockito.when(providerRepositoryMock.findProviderById(Mockito.any()))
                 .thenReturn(Optional.of(PartsFixture.defaultProvider()));
         Mockito.when((mapperMock.reverseMap(Mockito.any(), Mockito.any()))).thenReturn(PartsFixture.defaultPart1());
@@ -294,7 +283,6 @@ class PartsServiceImplTest {
         NewPartDto actual = service.createPart(PartsFixture.defaultNewPartDto());
         assertEquals(expected, actual);
     }
-     */
 
     @Test
     @DisplayName("Update existing part")
