@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Data
-@Table(name = "concessionaries")
+@Table(name = "concessionarias")
 public class Concessionarie {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

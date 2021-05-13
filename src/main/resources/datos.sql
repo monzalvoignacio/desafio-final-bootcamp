@@ -70,20 +70,20 @@ INSERT INTO `part_records` (`id`, `lastModification`, `normalPrice`, `urgentPric
 INSERT INTO `account_types` (`id`, `description`, `name`) VALUES ('1', 'Repuestos', 'R');
 INSERT INTO `account_types` (`id`, `description`, `name`) VALUES ('2', 'Garantia', 'G');
 #
-# TABLE STRUCTURE FOR: central_houses
+# TABLE STRUCTURE FOR: central_house
 #
 
 
-INSERT INTO `central_houses` (`id`, `address`, `country`, `name`, `phone`) VALUES ('0001', '285 Hahn Canyon Suite 050\nCaspertown, PA 23686-0283', 'Nepal', 'Casa Central 1', 956);
+INSERT INTO `central_house` (`id`, `address`, `country`, `name`, `phone`) VALUES ('0001', '285 Hahn Canyon Suite 050\nCaspertown, PA 23686-0283', 'Nepal', 'Casa Central 1', 956);
 
 #
-# TABLE STRUCTURE FOR: concessionaries
+# TABLE STRUCTURE FOR: concessionarias
 #
 
 
 
-INSERT INTO `concessionaries` (`id`, `address`, `country`, `name`, `phone`) VALUES ('0001', '920 Emard Stream Suite 759\nWest Jeffery, TX 24108-6987', 'Grenada', 'ut', 728524);
-INSERT INTO `concessionaries` (`id`, `address`, `country`, `name`, `phone`) VALUES ('0002', '27059 King Way\nPort Raoul, CO 92422', 'Jamaica', 'ab', 13);
+INSERT INTO `concessionarias` (`id`, `address`, `country`, `name`, `phone`) VALUES ('0001', '920 Emard Stream Suite 759\nWest Jeffery, TX 24108-6987', 'Grenada', 'ut', 728524);
+INSERT INTO `concessionarias` (`id`, `address`, `country`, `name`, `phone`) VALUES ('0002', '27059 King Way\nPort Raoul, CO 92422', 'Jamaica', 'ab', 13);
 
 
 
@@ -109,6 +109,6 @@ INSERT INTO `order_details` (`id`, `description`, `quantity`, `reason`, `account
 INSERT INTO `stock_central_house` (`id`,`quantity`,`central_house_id`,`part_id`) VALUES ('1', '123', '0001', '0');
 
 #
-# TABLE STRUCTURE FOR: users
+# TABLE STRUCTURE FOR: user
 #
-INSERT INTO `users` (`id`,`password`,`username`,`role`) VALUES ('1', '$2a$10$DXK9eG5/tHAwMiAVB.x5vOAE6EVnC2eYtvGo7UiZpHY/rHJcqtsqe', 'gabriel', 'ADMIN');
+INSERT INTO `user` (`id`,`password`,`username`,`role`) VALUES ('1', '$2a$10$DXK9eG5/tHAwMiAVB.x5vOAE6EVnC2eYtvGo7UiZpHY/rHJcqtsqe', 'gabriel', 'ADMIN');
