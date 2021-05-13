@@ -40,6 +40,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable();
         http.authorizeRequests()
+                .antMatchers("/api/v1/users/*")
+                .hasAnyAuthority("ADMIN")
                 .antMatchers("/api/v1/parts/*")
                 .hasAnyAuthority("ADMIN")
                 .antMatchers("/api/v1/parts/orders")
@@ -49,7 +51,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .httpBasic();
     }
-    
+
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
