@@ -106,7 +106,7 @@ INSERT INTO `orders` (`id`, `daysDelayed`, `deliveryDate`, `orderDate`, `orderNu
 
 INSERT INTO `order_details` (`id`, `description`, `quantity`, `reason`, `account_type_id`, `order_id`, `part_id`) VALUES ('0', 'pedido de puertas','1','who reason', '1', '0', '0');
 
-INSERT INTO `stock_central_house` (`id`,`quantity`,`central_house_id`,`part_id`) VALUES ('1', '123', '0001', '0');
+INSERT INTO `stock_central_houses` (`id`,`quantity`,`central_house_id`,`part_id`) VALUES ('1', '123', '0001', '0');
 
 #
 # TABLE STRUCTURE FOR: user
