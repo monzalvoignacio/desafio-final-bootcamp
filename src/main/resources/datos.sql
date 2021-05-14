@@ -21,10 +21,10 @@ INSERT INTO `stock` (`id`, `quantity`) VALUES ('3', 42);
 #
 
 
-INSERT INTO `providers` (`id`, `address`, `country`, `name`, `phone`) VALUES ('0', '9217 Cremin Radial Suite 062\nMarcotown, MO 43835', 'Georgia', 'at', '(967)125-2432x700');
-INSERT INTO `providers` (`id`, `address`, `country`, `name`, `phone`) VALUES ('1', '664 Little Manor Apt. 129\nPort Zaria, NV 07843', 'Haiti', 'beatae', '(361)707-0104x0774');
-INSERT INTO `providers` (`id`, `address`, `country`, `name`, `phone`) VALUES ('2', '06607 Antone Oval\nEast Bretton, NC 60305-4482', 'British Virgin Islands', 'voluptatibus', '410-578-4103');
-INSERT INTO `providers` (`id`, `address`, `country`, `name`, `phone`) VALUES ('3', '921 Felicita Stream Suite 310\nEast Americohaven, OR 51223', 'United Arab Emirates', 'nobis', '03742815631');
+INSERT INTO `provider` (`id`, `dir`, `country`, `name`, `telefono`) VALUES ('0', '9217 Cremin Radial Suite 062\nMarcotown, MO 43835', 'Georgia', 'at', '(967)125-2432x700');
+INSERT INTO `provider` (`id`, `dir`, `country`, `name`, `telefono`) VALUES ('1', '664 Little Manor Apt. 129\nPort Zaria, NV 07843', 'Haiti', 'beatae', '(361)707-0104x0774');
+INSERT INTO `provider` (`id`, `dir`, `country`, `name`, `telefono`) VALUES ('2', '06607 Antone Oval\nEast Bretton, NC 60305-4482', 'British Virgin Islands', 'voluptatibus', '410-578-4103');
+INSERT INTO `provider` (`id`, `dir`, `country`, `name`, `telefono`) VALUES ('3', '921 Felicita Stream Suite 310\nEast Americohaven, OR 51223', 'United Arab Emirates', 'nobis', '03742815631');
 
 
 
@@ -74,7 +74,7 @@ INSERT INTO `account_types` (`id`, `description`, `name`) VALUES ('2', 'Garantia
 #
 
 
-INSERT INTO `central_house` (`id`, `address`, `country`, `name`, `phone`) VALUES ('0001', '285 Hahn Canyon Suite 050\nCaspertown, PA 23686-0283', 'Nepal', 'Casa Central 1', 956);
+INSERT INTO `central_houses` (`id`, `dir`, `country`, `name`, `telefono`) VALUES ('0001', '285 Hahn Canyon Suite 050\nCaspertown, PA 23686-0283', 'Nepal', 'Casa Central 1', 956);
 
 #
 # TABLE STRUCTURE FOR: concessionarias
@@ -82,15 +82,15 @@ INSERT INTO `central_house` (`id`, `address`, `country`, `name`, `phone`) VALUES
 
 
 
-INSERT INTO `concessionarias` (`id`, `address`, `country`, `name`, `phone`) VALUES ('0001', '920 Emard Stream Suite 759\nWest Jeffery, TX 24108-6987', 'Grenada', 'ut', 728524);
-INSERT INTO `concessionarias` (`id`, `address`, `country`, `name`, `phone`) VALUES ('0002', '27059 King Way\nPort Raoul, CO 92422', 'Jamaica', 'ab', 13);
+INSERT INTO `concessionaries` (`id`, `dir`, `country`, `name`, `telefono`, `central_house_id`) VALUES ('0001', '920 Emard Stream Suite 759\nWest Jeffery, TX 24108-6987', 'Grenada', 'ut', 728524, '0001');
+INSERT INTO `concessionaries` (`id`, `dir`, `country`, `name`, `telefono`, `central_house_id`) VALUES ('0002', '27059 King Way\nPort Raoul, CO 92422', 'Jamaica', 'ab', 13, '0001');
 
 
 
 INSERT INTO `delivery_status` (`id`, `code`, `description`) VALUES ('0', 'P', 'Pendientes de entrega');
 INSERT INTO `delivery_status` (`id`, `code`, `description`) VALUES ('1', 'D', 'Demorado');
 INSERT INTO `delivery_status` (`id`, `code`, `description`) VALUES ('2', 'F', 'Finalizado');
-INSERT INTO `delivery_status` (`id`, `code`, `description`) VALUES ('4', 'C', 'CasaCentral');
+INSERT INTO `delivery_status` (`id`, `code`, `description`) VALUES ('4', 'C', 'Cancelado');
 
 #
 # TABLE STRUCTURE FOR: orders
@@ -111,4 +111,4 @@ INSERT INTO `stock_central_house` (`id`,`quantity`,`central_house_id`,`part_id`)
 #
 # TABLE STRUCTURE FOR: user
 #
-INSERT INTO `user` (`id`,`password`,`username`,`role`) VALUES ('1', '$2a$10$DXK9eG5/tHAwMiAVB.x5vOAE6EVnC2eYtvGo7UiZpHY/rHJcqtsqe', 'gabriel', 'ADMIN');
+INSERT INTO `user` (`id`,`password`,`username`,`role`) VALUES ('1', '$2a$10$DXK9eG5/tHAwMiAVB.x5vOAE6EVnC2eYtvGo7UiZpHY/rHJcqtsqe', 'ignacio', 'ADMIN');
