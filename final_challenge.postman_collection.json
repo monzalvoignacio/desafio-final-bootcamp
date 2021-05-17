@@ -1,0 +1,719 @@
+{
+	"info": {
+		"_postman_id": "ce3b9531-635f-4b16-8f41-386f258a97c0",
+		"name": "Final Challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "List all parts",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "ignacio",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "a692efb6ceaddad54d1a3cd2b9c891c8245e4865c8b879d8667d21327f923201",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://prod_desafio-bootcamp.furyapps.io/api/v1/parts/list",
+					"protocol": "https",
+					"host": [
+						"prod_desafio-bootcamp",
+						"furyapps",
+						"io"
+					],
+					"path": [
+						"api",
+						"v1",
+						"parts",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List parts with filters",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "ignacio",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "e1f7887179773edb12dd02cae1757ad631bc5fc64224832550535765bf461bd4",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://prod_desafio-bootcamp.furyapps.io/api/v1/parts/list?queryType=P&date=2000-09-10&order=1",
+					"protocol": "https",
+					"host": [
+						"prod_desafio-bootcamp",
+						"furyapps",
+						"io"
+					],
+					"path": [
+						"api",
+						"v1",
+						"parts",
+						"list"
+					],
+					"query": [
+						{
+							"key": "queryType",
+							"value": "P"
+						},
+						{
+							"key": "date",
+							"value": "2000-09-10"
+						},
+						{
+							"key": "order",
+							"value": "1"
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List all orders",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "ignacio",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "e1f7887179773edb12dd02cae1757ad631bc5fc64224832550535765bf461bd4",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://prod_desafio-bootcamp.furyapps.io/api/v1/parts/orders?dealerNumber=1",
+					"protocol": "https",
+					"host": [
+						"prod_desafio-bootcamp",
+						"furyapps",
+						"io"
+					],
+					"path": [
+						"api",
+						"v1",
+						"parts",
+						"orders"
+					],
+					"query": [
+						{
+							"key": "dealerNumber",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new part",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"description\": \"Estereo Ford Fiesta base\",\n  \"stock\": 18,\n  \"partCode\": \"00000004\",\n  \"providerId\": 1,\n  \"netWeight\": 12,\n  \"longDimension\": 10,\n  \"widthDimension\": 9,\n  \"talDimension\": 4,\n  \"lastModification\": \"2021-05-12\",\n  \"discountTypeId\": 1,\n  \"normalPrice\": 16000,\n  \"urgentPrice\": 23000\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL_ENV}}/api/v1/parts/",
+					"host": [
+						"{{URL_ENV}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"parts",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update stock",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"description\": \"Estereo Ford Fiesta base\",\n  \"stock\": 18,\n  \"partCode\": \"00000004\",\n  \"providerId\": 1,\n  \"netWeight\": 12,\n  \"longDimension\": 10,\n  \"widthDimension\": 9,\n  \"talDimension\": 4,\n  \"lastModification\": \"2021-05-12\",\n  \"discountTypeId\": 1,\n  \"normalPrice\": 16000,\n  \"urgentPrice\": 23000\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL_ENV}}/api/v1/parts?partCode=00000001&quantity=32",
+					"host": [
+						"{{URL_ENV}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"parts"
+					],
+					"query": [
+						{
+							"key": "partCode",
+							"value": "00000001"
+						},
+						{
+							"key": "quantity",
+							"value": "32"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new order",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "a692efb6ceaddad54d1a3cd2b9c891c8245e4865c8b879d8667d21327f923201",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"centralHouseId\": 1,\n  \"consessionarieId\": 1,\n  \"shippingType\": \"Mercado Envios\",\n  \"parts\": [\n    {\n      \"partCode\": \"00000002\",\n      \"description\": \"Paragolpes de Fiat 147\",\n      \"quantity\": 2,\n      \"accountType\": \"Repuestos\",\n      \"reason\": \"I hit a tree at 40mph. Car's good though\"\n    }\n  ]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://prod_desafio-bootcamp.furyapps.io/api/v1/parts/orders",
+					"protocol": "https",
+					"host": [
+						"prod_desafio-bootcamp",
+						"furyapps",
+						"io"
+					],
+					"path": [
+						"api",
+						"v1",
+						"parts",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch order",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL_ENV}}/api/v1/parts/orders/0001-0001-00000001",
+					"host": [
+						"{{URL_ENV}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"parts",
+						"orders",
+						"0001-0001-00000001"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List all orders with filters",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "ignacio",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "a692efb6ceaddad54d1a3cd2b9c891c8245e4865c8b879d8667d21327f923201",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://prod_desafio-bootcamp.furyapps.io/api/v1/parts/orders?dealerNumber=1&deliveryStatus=D&order=0",
+					"protocol": "https",
+					"host": [
+						"prod_desafio-bootcamp",
+						"furyapps",
+						"io"
+					],
+					"path": [
+						"api",
+						"v1",
+						"parts",
+						"orders"
+					],
+					"query": [
+						{
+							"key": "dealerNumber",
+							"value": "1"
+						},
+						{
+							"key": "deliveryStatus",
+							"value": "D"
+						},
+						{
+							"key": "order",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update order status",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"description\": \"Estereo Ford Fiesta base\",\n  \"stock\": 18,\n  \"partCode\": \"00000004\",\n  \"providerId\": 1,\n  \"netWeight\": 12,\n  \"longDimension\": 10,\n  \"widthDimension\": 9,\n  \"talDimension\": 4,\n  \"lastModification\": \"2021-05-12\",\n  \"discountTypeId\": 1,\n  \"normalPrice\": 16000,\n  \"urgentPrice\": 23000\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL_ENV}}/api/v1/parts/orders/update_status?orderStatus=C&orderNumberCM=25",
+					"host": [
+						"{{URL_ENV}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"parts",
+						"orders",
+						"update_status"
+					],
+					"query": [
+						{
+							"key": "orderStatus",
+							"value": "C"
+						},
+						{
+							"key": "orderNumberCM",
+							"value": "25"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new user",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "{{FURY_AUTH}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "nuevo_usuario",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "contrasenia",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{URL_ENV}}/api/v1/users/new/",
+					"host": [
+						"{{URL_ENV}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"new",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change user role",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"description\": \"Estereo Ford Fiesta base\",\n  \"stock\": 18,\n  \"partCode\": \"00000004\",\n  \"providerId\": 1,\n  \"netWeight\": 12,\n  \"longDimension\": 10,\n  \"widthDimension\": 9,\n  \"talDimension\": 4,\n  \"lastModification\": \"2021-05-12\",\n  \"discountTypeId\": 1,\n  \"normalPrice\": 16000,\n  \"urgentPrice\": 23000\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL_ENV}}/api/v1/users/changeRole?username=nuevo_usuario",
+					"host": [
+						"{{URL_ENV}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"changeRole"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "nuevo_usuario"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Concessionaries for Centralhouse",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "ignacio",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "a692efb6ceaddad54d1a3cd2b9c891c8245e4865c8b879d8667d21327f923201",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://prod_desafio-bootcamp.furyapps.io/api/v1/concessionaries?centralHouseId=1",
+					"protocol": "https",
+					"host": [
+						"prod_desafio-bootcamp",
+						"furyapps",
+						"io"
+					],
+					"path": [
+						"api",
+						"v1",
+						"concessionaries"
+					],
+					"query": [
+						{
+							"key": "centralHouseId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Concessionarie",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "ignacio",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "a692efb6ceaddad54d1a3cd2b9c891c8245e4865c8b879d8667d21327f923201",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 9,\n    \"address\": \"address2\",\n    \"phone\": \"94694371\",\n    \"country\": \"Uruguay\",\n    \"name\": \"Name 3\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://prod_desafio-bootcamp.furyapps.io/api/v1/concessionaries",
+					"protocol": "https",
+					"host": [
+						"prod_desafio-bootcamp",
+						"furyapps",
+						"io"
+					],
+					"path": [
+						"api",
+						"v1",
+						"concessionaries"
+					],
+					"query": [
+						{
+							"key": "centralHouseId",
+							"value": "1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Concessionarie",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "ignacio",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "a692efb6ceaddad54d1a3cd2b9c891c8245e4865c8b879d8667d21327f923201",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"name2\",\n    \"phone\": \"094694372\",\n    \"address\": \"address22\",\n    \"country\": \"Uruguay\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://prod_desafio-bootcamp.furyapps.io/api/v1/concessionaries?centralHouseId=1",
+					"protocol": "https",
+					"host": [
+						"prod_desafio-bootcamp",
+						"furyapps",
+						"io"
+					],
+					"path": [
+						"api",
+						"v1",
+						"concessionaries"
+					],
+					"query": [
+						{
+							"key": "centralHouseId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Concessionarie",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "ignacio",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "a692efb6ceaddad54d1a3cd2b9c891c8245e4865c8b879d8667d21327f923201",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://prod_desafio-bootcamp.furyapps.io/api/v1/concessionaries/9",
+					"protocol": "https",
+					"host": [
+						"prod_desafio-bootcamp",
+						"furyapps",
+						"io"
+					],
+					"path": [
+						"api",
+						"v1",
+						"concessionaries",
+						"9"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "username",
+				"value": "ignacio",
+				"type": "string"
+			},
+			{
+				"key": "password",
+				"value": "password",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

@@ -1,3 +1,8 @@
+## Funcionamiento
+**Autenticacion**
+La autenticacion funciona con Basic Auth. Existe un usuario con username `ignacio` y contraseña `password`.
+**Postman**
+Se adjunta el archivo `final_challenge.postman_collection.json` con una coleccion de postman con todos los endpoints necesarios.
 
 ## Parts controller
 **POST - Create new part**
@@ -98,8 +103,45 @@ _Switches between admin and regular roles_
 *Query string parameters:*
 - username: string
 
+## Requerimiento 6
+**POST - Create new concessionarie**
 
+api/v1/concessionaries
+*x-www-form-encoded parameters:*
+- centralHouseId: int
+```
+{
+    "name": "Name",
+    "phone": "123123123",
+    "address": "Address",
+    "country": "Uruguay"
+}
+```
 
+**GET - List concessionaries for a central house**
+
+api/v1/concessionaries
+*x-www-form-encoded parameters:*
+- centralHouseId: int
+
+**DELETE - Delete concessionarie**
+
+api/v1/concessionaries/{concessionarieId}
+
+**PATCH - Update concessionarie**
+
+api/v1/concessionaries
+*x-www-form-encoded parameters:*
+- centralHouseId: int
+```
+{
+    "id": 9,
+    "name": "Name",
+    "phone": "123123123",
+    "address": "Address",
+    "country": "Uruguay"
+}
+```
 
 
 
